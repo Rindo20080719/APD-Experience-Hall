@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APD体験館 — 聞こえているのに、届かない。</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ===== INDEX SPECIFIC ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 斜め装飾ライン群 */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: var(--gold-line-bright);
+    }
+
+    .hero-lines {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .hero-line {
+      position: absolute;
+      height: 1px;
+      background: var(--gold-line);
+      overflow: hidden;
+    }
+
+    /* 光の流れ */
+    .hero-line::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -180px;
+      width: 180px;
+      height: 1px;
+      background: linear-gradient(to right,
+        transparent,
+        rgba(201, 168, 76, 0.85) 50%,
+        transparent
+      );
+      animation: lineSweep 9s ease-in-out infinite;
+    }
+
+    /* 奇数ライン（左起点）は右へスライド */
+    .h-line-1, .h-line-3, .h-line-5 {
+      animation: slideRight 13s ease-in-out infinite;
+    }
+    /* 偶数ライン（右起点）は左へスライド */
+    .h-line-2, .h-line-4, .h-line-6 {
+      animation: slideLeft 11s ease-in-out infinite;
+    }
+
+    /* 光のタイミングをずらして自然に */
+    .h-line-1::after { animation-delay:  0s;  }
+    .h-line-2::after { animation-delay: -1.5s; }
+    .h-line-3::after { animation-delay: -3s;  }
+    .h-line-4::after { animation-delay: -4.5s; }
+    .h-line-5::after { animation-delay: -6s;  }
+    .h-line-6::after { animation-delay: -7.5s; }
+
+    /* スライドのタイミングオフセット */
+    .h-line-1 { animation-delay:  0s;  }
+    .h-line-2 { animation-delay: -2s;  }
+    .h-line-3 { animation-delay: -4s;  }
+    .h-line-4 { animation-delay: -6s;  }
+    .h-line-5 { animation-delay: -8s;  }
+    .h-line-6 { animation-delay: -3s;  }
+
+    .hero-subtitle {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      font-weight: 300;
+      margin-bottom: 28px;
+      animation: fadeUp 1s ease 0.2s both;
+    }
+
+    .hero-title {
+      font-size: clamp(3.2rem, 6vw, 5rem);
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      line-height: 1.3;
+      margin-bottom: 60px;
+      animation: fadeUp 1s ease 0.5s both;
+    }
+
+    .hero-separator {
+      width: 520px;
+      max-width: 90%;
+      height: 1px;
+      background: var(--gold-line-bright);
+      margin: 0 auto 52px;
+      animation: fadeUp 1s ease 0.6s both;
+    }
+
+    .hero-desc {
+      font-size: 0.96rem;
+      line-height: 2.2;
+      color: var(--white-dim);
+      font-weight: 300;
+      margin-bottom: 8px;
+      animation: fadeUp 1s ease 0.75s both;
+    }
+
+    .hero-author {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      margin-bottom: 60px;
+      animation: fadeUp 1s ease 0.85s both;
+    }
+
+    .hero-author a {
+      color: var(--gold-dim);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .hero-author a:hover { color: var(--gold); }
+
+    .hero-btns {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeUp 1s ease 1s both;
+    }
+
+    /* line decorations */
+    .h-line-1 { top: 28%; left: 0; width: 30%; }
+    .h-line-2 { top: 32%; right: 0; width: 38%; }
+    .h-line-3 { top: 60%; left: 0; width: 45%; }
+    .h-line-4 { top: 64%; right: 0; width: 25%; }
+    .h-line-5 { bottom: 18%; left: 0; width: 55%; }
+    .h-line-6 { bottom: 14%; right: 0; width: 40%; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">APD体験館</a>
+    <ul class="nav-links">
+      <li><a href="#about">作者</a></li>
+      <li><a href="understand.html">理解する</a></li>
+      <li><a href="experience.html">体験する</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-lines">
+      <div class="hero-line h-line-1"></div>
+      <div class="hero-line h-line-2"></div>
+      <div class="hero-line h-line-3"></div>
+      <div class="hero-line h-line-4"></div>
+      <div class="hero-line h-line-5"></div>
+      <div class="hero-line h-line-6"></div>
+    </div>
+
+    <p class="hero-subtitle">聴覚情報処理障害 &mdash; Auditory Processing Disorder（APD）</p>
+    <h1 class="hero-title">聞こえているのに、届かない。</h1>
+    <div class="hero-separator"></div>
+    <p class="hero-desc">
+      確かに声は聞こえます。<br>
+      しかし、言葉としてうまく処理できません。 &nbsp;—&nbsp; それが<a href="understand.html" class="highlight" style="text-decoration:none;">APD</a>です。
+    </p>
+    <p class="hero-desc" style="margin-bottom: 12px;">
+      このサイトはAPD患者の一人である私が聴いている世界です。
+    </p>
+    <p class="hero-author">作者 &nbsp;<a href="#about">りんとう</a></p>
+    <div class="hero-btns">
+      <a href="experience.html" class="btn">体験する</a>
+      <a href="understand.html" class="btn">理解する</a>
+    </div>
+  </section>
+
+  <!-- ABOUT SECTION -->
+  <div class="deco deco-full"></div>
+
+  <section class="section" id="about" style="padding: 90px 80px 80px;">
+    <div class="deco deco-r" style="margin-bottom: 80px;"></div>
+    <div class="section-inner reveal">
+      <p class="section-label">作者について</p>
+      <div class="deco deco-mid" style="margin: 0 auto 48px;"></div>
+      <p style="max-width: 640px; margin: 0 auto;">
+        私はAPDと診断を受けた当事者です。<br><br>
+        日常の中で「聞こえているはずなのに理解できない」という
+        経験を繰り返してきました。<br><br>
+        このサイトは、APDの当事者の一人である私が日々感じている困難を、
+        言葉と体験として届けるために作りました。<br>
+        <span class="highlight">あなたの理解が、私たちの支えになります。</span>
+      </p>
+    </div>
+    <div class="deco deco-l" style="margin-top: 80px;"></div>
+  </section>
+
+  <div class="deco deco-full"></div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>APD体験館 &nbsp;|&nbsp; 作者 りんとう</p>
+  </footer>
+
+  <script>
+    // Reveal on scroll
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('visible');
+      });
+    }, { threshold: 0.15 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

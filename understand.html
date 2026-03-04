@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>理解する | APD体験館</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ===== UNDERSTAND SPECIFIC ===== */
+    .page-hero {
+      min-height: 40vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 140px 80px 60px;
+      text-align: center;
+    }
+
+    .page-hero .label {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.85rem;
+      color: var(--gold);
+      letter-spacing: 0.22em;
+      font-weight: 300;
+      margin-bottom: 18px;
+    }
+
+    .page-hero h1 {
+      font-size: 2.1rem;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      margin-bottom: 0;
+    }
+
+    .page-hero h1::before,
+    .page-hero h1::after {
+      content: '—';
+      color: var(--gold-dim);
+    }
+
+    /* Exhibit block */
+    .exhibit {
+      padding: 90px 80px;
+      position: relative;
+    }
+
+    .exhibit-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .exhibit h2 {
+      font-size: 3.5rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      margin-bottom: 44px;
+      line-height: 1.3;
+    }
+
+    .exhibit p {
+      font-size: 0.97rem;
+      line-height: 2.15;
+      color: var(--white-dim);
+      font-weight: 300;
+    }
+
+    .exhibit p .em {
+      font-style: italic;
+      color: var(--white);
+    }
+
+    /* Final section */
+    .finale {
+      padding: 100px 80px;
+    }
+
+    .finale-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .finale h2 {
+      font-size: 2.6rem;
+      font-weight: 400;
+      line-height: 1.5;
+      margin-bottom: 60px;
+    }
+
+    .finale-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .finale-text p {
+      font-size: 0.96rem;
+      line-height: 2.2;
+      color: var(--white-dim);
+      font-weight: 300;
+      margin-bottom: 18px;
+    }
+
+    .apd-mark {
+      text-align: center;
+    }
+
+    .apd-mark img {
+      width: 180px;
+      border-radius: 50%;
+      margin-bottom: 12px;
+    }
+
+    .apd-mark p {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.82rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    .ref-box {
+      padding: 32px 36px;
+      background: var(--bg-card);
+      border: 1px solid var(--gold-line);
+      border-radius: 4px;
+    }
+
+    .ref-box h3 {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      margin-bottom: 18px;
+      color: var(--white);
+    }
+
+    .ref-box .ref-item {
+      margin-bottom: 16px;
+    }
+
+    .ref-box .ref-item p {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
+    .ref-box .ref-item a {
+      color: var(--gold-dim);
+      font-size: 0.78rem;
+      word-break: break-all;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .ref-box .ref-item a:hover { color: var(--gold); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">APD体験館</a>
+    <ul class="nav-links">
+      <li><a href="index.html#about">著者</a></li>
+      <li><a href="understand.html" class="active">理解する</a></li>
+      <li><a href="experience.html">体験する</a></li>
+    </ul>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="deco deco-full" style="margin-top: 56px;"></div>
+
+  <header class="page-hero">
+    <p class="label reveal">理解する</p>
+    <h1 class="reveal reveal-delay-1">私が聴いている世界</h1>
+  </header>
+
+  <div class="deco deco-r reveal"></div>
+
+  <!-- ===== EXHIBIT 1: 作業と会話 ===== -->
+  <section class="exhibit">
+    <div class="deco deco-l" style="margin-bottom: 80px;"></div>
+    <div class="exhibit-inner reveal">
+      <h2>作業と会話</h2>
+      <p>
+        <span class="em">「手を動かしながら、話を聞く」</span><br>
+        多くの人が当たり前にこなすそのリズムが、私にはとても難しい。<br><br>
+        作業に集中すれば、声はただの環境音になり、<br>
+        会話に集中すれば、作業が止まってしまう。
+      </p>
+    </div>
+    <div class="deco deco-r" style="margin-top: 80px;"></div>
+  </section>
+
+  <div class="deco deco-full"></div>
+
+  <!-- ===== EXHIBIT 2: 騒音と会話 ===== -->
+  <section class="exhibit">
+    <div class="deco deco-r" style="margin-bottom: 80px;"></div>
+    <div class="exhibit-inner reveal">
+      <h2>騒音と会話</h2>
+      <p>
+        ある程度のノイズや騒音が混ざった瞬間、私はあなたの声を聴きとれません。<br><br>
+        たまに自分の喋っていることがよくわからなくなります。
+      </p>
+    </div>
+    <div class="deco deco-l" style="margin-top: 80px;"></div>
+  </section>
+
+  <div class="deco deco-full"></div>
+
+  <!-- ===== EXHIBIT 3: 複数の声と会話 ===== -->
+  <section class="exhibit">
+    <div class="deco deco-l" style="margin-bottom: 80px;"></div>
+    <div class="exhibit-inner reveal">
+      <h2>複数の声と会話</h2>
+      <p>
+        複数の人が話している最中、特定の人と会話することは難しいです。<br><br>
+        私の世界はパニックを起こします。
+      </p>
+    </div>
+    <div class="deco deco-r" style="margin-top: 80px;"></div>
+  </section>
+
+  <div class="deco deco-full"></div>
+
+  <!-- ===== EXHIBIT 4: ストレスと会話 ===== -->
+  <section class="exhibit">
+    <div class="deco deco-r" style="margin-bottom: 80px;"></div>
+    <div class="exhibit-inner reveal">
+      <h2>ストレスと会話</h2>
+      <p>
+        私の「聴く力」は、私の「心の余裕」とつながっています。<br><br>
+        緊張したとき、焦っているとき、あるいは誰かに叱責されているとき。<br>
+        脳は「聞き取ること」よりも「自分を守ること」に精一杯になってしまいます。
+      </p>
+    </div>
+    <div class="deco deco-l" style="margin-top: 80px;"></div>
+  </section>
+
+  <div class="deco deco-full"></div>
+
+  <!-- ===== FINALE ===== -->
+  <section class="finale">
+    <div class="finale-inner">
+      <h2 class="reveal">
+        理解してくださることが、<br>支援になります。
+      </h2>
+      <div class="deco deco-l reveal" style="margin-bottom: 60px;"></div>
+
+      <div class="finale-body">
+        <div class="finale-text reveal">
+          <p>
+            <span class="highlight">APD</span>は、目に見えません。<br>
+            補聴器をつけているわけでも、耳を塞いでいるわけでもない。
+          </p>
+          <p>
+            だからこそ、「聞こえているはずだ」という周囲の思い込みが、
+            時に、言葉が通じないこと以上の孤独を生んでしまいます。
+          </p>
+          <p>
+            理解は、歩み寄りの第一歩。<br>
+            そして、それこそが何よりも確かな<span class="highlight">「支援」</span>なのです。
+          </p>
+          <div style="margin-top: 40px;">
+            <a href="experience.html" class="btn">体験してみる</a>
+          </div>
+        </div>
+
+        <div class="reveal reveal-delay-2">
+          <div class="apd-mark" style="margin-bottom: 32px;">
+            <img src="https://apd-mark.com/wp-content/uploads/2023/01/APD_mark_c.png"
+                 alt="LiD・APDマーク"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+            <div style="display:none; width:180px; height:180px; border-radius:50%; border:2px solid var(--gold-line); margin: 0 auto 12px; display:flex; align-items:center; justify-content:center;">
+              <span style="font-size:0.75rem; color:var(--muted); text-align:center; padding:12px;">LiD・APDマーク</span>
+            </div>
+            <p>LiD・APDマーク</p>
+          </div>
+
+          <div class="ref-box">
+            <h3>参考サイト</h3>
+            <div class="ref-item">
+              <p>APDマーク公式サイト</p>
+              <a href="https://apd-mark.com/what-is-apd/index.html" target="_blank" rel="noopener">
+                https://apd-mark.com/what-is-apd/index.html
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="deco deco-full"></div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>APD体験館 &nbsp;|&nbsp; 作者 りんとう</p>
+  </footer>
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
