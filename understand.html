@@ -7,74 +7,120 @@
   <link rel="stylesheet" href="style.css">
   <style>
     /* ===== UNDERSTAND SPECIFIC ===== */
-    .page-hero {
-      min-height: 40vh;
+
+    .understand-page {
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
-      padding: 140px 80px 60px;
-      text-align: center;
-    }
-
-    .page-hero .label {
-      font-family: 'Noto Sans JP', sans-serif;
-      font-size: 0.85rem;
-      color: var(--gold);
-      letter-spacing: 0.22em;
-      font-weight: 300;
-      margin-bottom: 18px;
-    }
-
-    .page-hero h1 {
-      font-size: 2.1rem;
-      font-weight: 400;
-      letter-spacing: 0.14em;
-      display: flex;
       align-items: center;
       justify-content: center;
-      gap: 22px;
-      margin-bottom: 0;
-    }
-
-    .page-hero h1::before,
-    .page-hero h1::after {
-      content: '—';
-      color: var(--gold-dim);
-    }
-
-    /* Exhibit block */
-    .exhibit {
-      padding: 90px 80px;
+      padding: 120px 40px 80px;
       position: relative;
     }
 
-    .exhibit-inner {
-      max-width: 860px;
-      margin: 0 auto;
-      text-align: center;
+    @keyframes fadeUpSoft {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    .exhibit h2 {
-      font-size: 3.5rem;
+    .understand-title {
+      font-size: clamp(2.2rem, 4vw, 3rem);
       font-weight: 400;
-      letter-spacing: 0.04em;
-      margin-bottom: 44px;
-      line-height: 1.3;
+      letter-spacing: 0.14em;
+      text-align: center;
+      margin-bottom: 64px;
+      animation: fadeUpSoft 1.2s ease-out 0.3s both;
     }
 
-    .exhibit p {
-      font-size: 0.97rem;
-      line-height: 2.15;
-      color: var(--white-dim);
+    /* Accordion list */
+    .accordion-list {
+      width: 100%;
+      max-width: 660px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      animation: fadeUpSoft 1.4s ease-out 0.5s both;
+    }
+
+    .accordion-item {
+      border: 1.5px solid var(--gold);
+      border-radius: 999px;
+      overflow: hidden;
+      transition: border-radius 0.5s ease;
+    }
+
+    .accordion-item.open {
+      border-radius: 20px;
+    }
+
+    .accordion-btn {
+      width: 100%;
+      background: var(--bg-card);
+      border: none;
+      color: var(--white);
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.15rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      padding: 22px 44px;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.3s;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .accordion-btn::after {
+      content: '＋';
+      position: absolute;
+      right: 36px;
+      font-size: 1rem;
+      color: var(--gold-dim);
+      transition: transform 0.6s ease, opacity 0.5s;
+      font-family: 'Noto Sans JP', sans-serif;
       font-weight: 300;
     }
 
-    .exhibit p .em {
+    .accordion-item.open .accordion-btn::after {
+      transform: rotate(45deg);
+    }
+
+    .accordion-btn:hover {
+      background: rgba(201, 168, 76, 0.06);
+      transition: background 0.5s;
+    }
+
+    .accordion-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.65s ease, padding 0.5s ease;
+      padding: 0 44px;
+      background: var(--bg-card);
+    }
+
+    .accordion-item.open .accordion-body {
+      max-height: 600px;
+      padding: 0 44px 32px;
+    }
+
+    .accordion-body p {
+      font-size: 0.95rem;
+      line-height: 2.15;
+      color: var(--white-dim);
+      font-weight: 300;
+      border-top: 1px solid var(--gold-line);
+      padding-top: 24px;
+    }
+
+    .accordion-body p .em {
       font-style: italic;
       color: var(--white);
     }
 
-    /* Final section */
+    /* Finale */
     .finale {
       padding: 100px 80px;
     }
@@ -112,7 +158,6 @@
 
     .apd-mark img {
       width: 180px;
-      border-radius: 50%;
       margin-bottom: 12px;
     }
 
@@ -160,6 +205,24 @@
     }
 
     .ref-box .ref-item a:hover { color: var(--gold); }
+
+    /* ？フレーム装飾 */
+    .question-deco {
+      position: fixed;
+      bottom: -30px;
+      right: 80px;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 28rem;
+      font-weight: 900;
+      color: rgba(201, 168, 76, 0.12);
+      line-height: 1;
+      transform: rotate(-30deg);
+      pointer-events: none;
+      user-select: none;
+      z-index: -1;
+    }
   </style>
 </head>
 <body>
@@ -168,86 +231,91 @@
   <nav>
     <a href="index.html" class="nav-logo">APD体験館</a>
     <ul class="nav-links">
-      <li><a href="index.html#about">著者</a></li>
+      <li class="nav-dropdown">
+        <button class="nav-dropdown-btn">相談する <span class="nav-dropdown-arrow">▼</span></button>
+        <ul class="nav-dropdown-menu">
+          <li><a href="https://apd-peer.jimdofree.com/%E5%80%8B%E5%88%A5%E7%9B%B8%E8%AB%87/" target="_blank" rel="noopener">個別相談</a></li>
+          <li><a href="https://line.me/ti/g2/avoAahmHoH8aKvYKPfHE_g?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank" rel="noopener">オープンチャット</a></li>
+        </ul>
+      </li>
       <li><a href="understand.html" class="active">理解する</a></li>
       <li><a href="experience.html">体験する</a></li>
     </ul>
   </nav>
 
-  <!-- PAGE HEADER -->
-  <div class="deco deco-full" style="margin-top: 56px;"></div>
+  <!-- MAIN -->
+  <main class="understand-page">
+    <h1 class="understand-title">理解する</h1>
 
-  <header class="page-hero">
-    <p class="label reveal">理解する</p>
-    <h1 class="reveal reveal-delay-1">私が聴いている世界</h1>
-  </header>
+    <div class="accordion-list">
 
-  <div class="deco deco-r reveal"></div>
+      <!-- APDとは？ -->
+      <div class="accordion-item">
+        <button class="accordion-btn" aria-expanded="false">APDとは？</button>
+        <div class="accordion-body">
+          <p>
+            APD（聴覚情報処理障害）とは、耳の機能は正常であるにもかかわらず、
+            脳での音声処理がうまくいかない状態です。<br><br>
+            音は聞こえていても、それを言葉として認識・処理する過程に困難が生じます。
+            「聞こえているのに、聞き取れない」という状態が特徴的です。<br><br>
+            聴力検査では異常が見られないため、周囲に気づかれにくく、
+            本人も長年にわたって気づかないことがあります。
+          </p>
+        </div>
+      </div>
 
-  <!-- ===== EXHIBIT 1: 作業と会話 ===== -->
-  <section class="exhibit">
-    <div class="deco deco-l" style="margin-bottom: 80px;"></div>
-    <div class="exhibit-inner reveal">
-      <h2>作業と会話</h2>
-      <p>
-        <span class="em">「手を動かしながら、話を聞く」</span><br>
-        多くの人が当たり前にこなすそのリズムが、私にはとても難しい。<br><br>
-        作業に集中すれば、声はただの環境音になり、<br>
-        会話に集中すれば、作業が止まってしまう。
-      </p>
+      <!-- こまりごと -->
+      <div class="accordion-item">
+        <button class="accordion-btn" aria-expanded="false">こまりごと</button>
+        <div class="accordion-body">
+          <p>
+            <span class="em">騒がしい場所での会話</span>が特に難しく、
+            相手の声がノイズに溶け込んでしまいます。<br><br>
+            複数の人が同時に話すと、どの声に集中すればよいか分からなくなります。
+            作業しながら話を聞くことも苦手です。<br><br>
+            電話や聞き慣れない声、早口、抑揚の少ない話し方も聞き取りにくく、
+            「もう一度言ってください」を繰り返すことへの申し訳なさも積み重なります。
+          </p>
+        </div>
+      </div>
+
+      <!-- 配慮について -->
+      <div class="accordion-item">
+        <button class="accordion-btn" aria-expanded="false">配慮について</button>
+        <div class="accordion-body">
+          <p>
+            静かな環境での会話や、文字・メモによる情報共有が助けになります。<br><br>
+            話しかけるときは、相手の注意を向けてから話し始めると伝わりやすくなります。
+            ゆっくり、はっきりとした話し方も有効です。<br><br>
+            「聞く気がない」「やる気がない」ではなく、
+            <span class="em">脳の処理の問題</span>であることを知ってもらえるだけで、
+            当事者の心理的負担は大きく軽くなります。
+          </p>
+        </div>
+      </div>
+
+      <!-- 誤解について -->
+      <div class="accordion-item">
+        <button class="accordion-btn" aria-expanded="false">誤解について</button>
+        <div class="accordion-body">
+          <p>
+            「聴力検査が正常なら問題ない」は誤りです。<br>
+            APDは聴力ではなく、<span class="em">音声の処理能力</span>の問題です。<br><br>
+            「注意散漫」「やる気の問題」と誤解されることがありますが、
+            これは本人の努力不足ではありません。<br><br>
+            また、APDは発達障害との重複が多く見られますが、
+            APD単独でも存在します。理解と適切なサポートが、
+            当事者の日常生活の質を大きく改善します。
+          </p>
+        </div>
+      </div>
+
     </div>
-    <div class="deco deco-r" style="margin-top: 80px;"></div>
-  </section>
+  </main>
 
+  <!-- FINALE -->
   <div class="deco deco-full"></div>
 
-  <!-- ===== EXHIBIT 2: 騒音と会話 ===== -->
-  <section class="exhibit">
-    <div class="deco deco-r" style="margin-bottom: 80px;"></div>
-    <div class="exhibit-inner reveal">
-      <h2>騒音と会話</h2>
-      <p>
-        ある程度のノイズや騒音が混ざった瞬間、私はあなたの声を聴きとれません。<br><br>
-        たまに自分の喋っていることがよくわからなくなります。
-      </p>
-    </div>
-    <div class="deco deco-l" style="margin-top: 80px;"></div>
-  </section>
-
-  <div class="deco deco-full"></div>
-
-  <!-- ===== EXHIBIT 3: 複数の声と会話 ===== -->
-  <section class="exhibit">
-    <div class="deco deco-l" style="margin-bottom: 80px;"></div>
-    <div class="exhibit-inner reveal">
-      <h2>複数の声と会話</h2>
-      <p>
-        複数の人が話している最中、特定の人と会話することは難しいです。<br><br>
-        私の世界はパニックを起こします。
-      </p>
-    </div>
-    <div class="deco deco-r" style="margin-top: 80px;"></div>
-  </section>
-
-  <div class="deco deco-full"></div>
-
-  <!-- ===== EXHIBIT 4: ストレスと会話 ===== -->
-  <section class="exhibit">
-    <div class="deco deco-r" style="margin-bottom: 80px;"></div>
-    <div class="exhibit-inner reveal">
-      <h2>ストレスと会話</h2>
-      <p>
-        私の「聴く力」は、私の「心の余裕」とつながっています。<br><br>
-        緊張したとき、焦っているとき、あるいは誰かに叱責されているとき。<br>
-        脳は「聞き取ること」よりも「自分を守ること」に精一杯になってしまいます。
-      </p>
-    </div>
-    <div class="deco deco-l" style="margin-top: 80px;"></div>
-  </section>
-
-  <div class="deco deco-full"></div>
-
-  <!-- ===== FINALE ===== -->
   <section class="finale">
     <div class="finale-inner">
       <h2 class="reveal">
@@ -276,12 +344,7 @@
 
         <div class="reveal reveal-delay-2">
           <div class="apd-mark" style="margin-bottom: 32px;">
-            <img src="https://apd-mark.com/wp-content/uploads/2023/01/APD_mark_c.png"
-                 alt="LiD・APDマーク"
-                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-            <div style="display:none; width:180px; height:180px; border-radius:50%; border:2px solid var(--gold-line); margin: 0 auto 12px; display:flex; align-items:center; justify-content:center;">
-              <span style="font-size:0.75rem; color:var(--muted); text-align:center; padding:12px;">LiD・APDマーク</span>
-            </div>
+            <img src="apd-mark.png" alt="LiD・APDマーク">
             <p>LiD・APDマーク</p>
           </div>
 
@@ -301,17 +364,47 @@
 
   <div class="deco deco-full"></div>
 
+  <!-- ？フレームデコレーション -->
+  <div class="question-deco">?</div>
+
   <!-- FOOTER -->
   <footer>
-    <p>APD体験館 &nbsp;|&nbsp; 作者 りんとう</p>
+    <p>APD体験館 &nbsp;|&nbsp; 作者 りんどう</p>
   </footer>
 
   <script>
-    const reveals = document.querySelectorAll('.reveal');
+    // Reveal on scroll
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.12 });
-    reveals.forEach(el => observer.observe(el));
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ？デコをフォントロード後に表示（FOUT対策）
+    document.fonts.ready.then(() => {
+      const deco = document.querySelector('.question-deco');
+      if (deco) deco.style.opacity = '1';
+    });
+
+    // Accordion
+    document.querySelectorAll('.accordion-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.accordion-item');
+        const isOpen = item.classList.contains('open');
+
+        // Close all
+        document.querySelectorAll('.accordion-item').forEach(i => {
+          i.classList.remove('open');
+          i.querySelector('.accordion-btn').setAttribute('aria-expanded', 'false');
+        });
+
+        // Open clicked if it was closed
+        if (!isOpen) {
+          item.classList.add('open');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
   </script>
+  <script src="nav.js"></script>
 </body>
 </html>

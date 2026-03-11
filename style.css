@@ -72,6 +72,88 @@ nav {
   color: var(--gold);
 }
 
+/* ===== DROPDOWN ===== */
+.nav-dropdown {
+  position: relative;
+}
+
+.nav-dropdown-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--white);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 300;
+  letter-spacing: 0.14em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  transition: color 0.3s;
+}
+
+.nav-dropdown-btn:hover {
+  color: var(--gold);
+}
+
+.nav-dropdown-arrow {
+  font-size: 0.6rem;
+  transition: transform 0.35s ease;
+  display: inline-block;
+}
+
+.nav-dropdown.open .nav-dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 18px);
+  left: 50%;
+  transform: translateX(-50%);
+  list-style: none;
+  background: rgba(12, 21, 37, 0.97);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--gold-line);
+  border-radius: 8px;
+  overflow: hidden;
+  min-width: 140px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(-6px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.nav-dropdown.open .nav-dropdown-menu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.nav-dropdown-menu li a {
+  display: block;
+  padding: 14px 24px;
+  color: var(--white);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.nav-dropdown-menu li a:hover {
+  background: rgba(201, 168, 76, 0.1);
+  color: var(--gold);
+}
+
+.nav-dropdown-menu li + li {
+  border-top: 1px solid var(--gold-line);
+}
+
 /* ========= DECORATIVE LINES ========= */
 .deco {
   height: 1px;

@@ -84,9 +84,9 @@
 
     .hero-subtitle {
       font-family: 'Noto Sans JP', sans-serif;
-      font-size: 0.82rem;
-      letter-spacing: 0.25em;
-      color: var(--gold);
+      font-size: 1.1rem;
+      letter-spacing: 0.2em;
+      color: var(--white-dim);
       font-weight: 300;
       margin-bottom: 28px;
       animation: fadeUp 1s ease 0.2s both;
@@ -97,8 +97,19 @@
       font-weight: 400;
       letter-spacing: 0.04em;
       line-height: 1.3;
-      margin-bottom: 60px;
+      margin-bottom: 24px;
+      color: var(--gold);
       animation: fadeUp 1s ease 0.5s both;
+    }
+
+    .hero-en {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: clamp(1rem, 2vw, 1.4rem);
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      color: var(--white);
+      margin-bottom: 52px;
+      animation: fadeUp 1s ease 0.65s both;
     }
 
     .hero-separator {
@@ -137,6 +148,21 @@
 
     .hero-author a:hover { color: var(--gold); }
 
+    .hero-catch {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      color: var(--white-dim);
+      margin-bottom: 48px;
+      animation: fadeUpSoft 1.2s ease-out 0.85s both;
+    }
+
+    @keyframes fadeUpSoft {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
     .hero-btns {
       display: flex;
       gap: 30px;
@@ -160,7 +186,13 @@
   <nav>
     <a href="index.html" class="nav-logo">APD体験館</a>
     <ul class="nav-links">
-      <li><a href="#about">作者</a></li>
+      <li class="nav-dropdown">
+        <button class="nav-dropdown-btn">相談する <span class="nav-dropdown-arrow">▼</span></button>
+        <ul class="nav-dropdown-menu">
+          <li><a href="https://apd-peer.jimdofree.com/%E5%80%8B%E5%88%A5%E7%9B%B8%E8%AB%87/" target="_blank" rel="noopener">個別相談</a></li>
+          <li><a href="https://line.me/ti/g2/avoAahmHoH8aKvYKPfHE_g?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank" rel="noopener">オープンチャット</a></li>
+        </ul>
+      </li>
       <li><a href="understand.html">理解する</a></li>
       <li><a href="experience.html">体験する</a></li>
     </ul>
@@ -177,17 +209,10 @@
       <div class="hero-line h-line-6"></div>
     </div>
 
-    <p class="hero-subtitle">聴覚情報処理障害 &mdash; Auditory Processing Disorder（APD）</p>
-    <h1 class="hero-title">聞こえているのに、届かない。</h1>
-    <div class="hero-separator"></div>
-    <p class="hero-desc">
-      確かに声は聞こえます。<br>
-      しかし、言葉としてうまく処理できません。 &nbsp;—&nbsp; それが<a href="understand.html" class="highlight" style="text-decoration:none;">APD</a>です。
-    </p>
-    <p class="hero-desc" style="margin-bottom: 12px;">
-      このサイトはAPD患者の一人である私が聴いている世界です。
-    </p>
-    <p class="hero-author">作者 &nbsp;<a href="#about">りんとう</a></p>
+    <p class="hero-subtitle">&mdash;&ensp;聞こえているのに、聞き取れない&ensp;&mdash;</p>
+    <h1 class="hero-title">聴覚情報処理障害</h1>
+    <p class="hero-en">Auditory Processing Disorder &mdash; <span class="highlight">APD</span></p>
+    <p class="hero-catch">APDについて理解を深めるサイトがなかったので、作りました</p>
     <div class="hero-btns">
       <a href="experience.html" class="btn">体験する</a>
       <a href="understand.html" class="btn">理解する</a>
@@ -199,9 +224,11 @@
 
   <section class="section" id="about" style="padding: 90px 80px 80px;">
     <div class="deco deco-r" style="margin-bottom: 80px;"></div>
-    <div class="section-inner reveal">
+    <div class="section-inner reveal" style="margin-bottom: 0; padding-bottom: 0;">
       <p class="section-label">作者について</p>
-      <div class="deco deco-mid" style="margin: 0 auto 48px;"></div>
+    </div>
+    <div class="deco deco-mid" style="margin: 18px auto 48px;"></div>
+    <div class="section-inner reveal">
       <p style="max-width: 640px; margin: 0 auto;">
         私はAPDと診断を受けた当事者です。<br><br>
         日常の中で「聞こえているはずなのに理解できない」という
@@ -218,7 +245,7 @@
 
   <!-- FOOTER -->
   <footer>
-    <p>APD体験館 &nbsp;|&nbsp; 作者 りんとう</p>
+    <p>APD体験館 &nbsp;|&nbsp; 作者 りんどう</p>
   </footer>
 
   <script>
@@ -231,5 +258,6 @@
     }, { threshold: 0.15 });
     reveals.forEach(el => observer.observe(el));
   </script>
+  <script src="nav.js"></script>
 </body>
 </html>
