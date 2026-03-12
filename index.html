@@ -570,8 +570,23 @@ footer {
     <p>APD体験館 &nbsp;|&nbsp; 作者 りんどう</p>
   </footer>
 
-  <script>
-    // Reveal on scroll
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js';
+    import { getAnalytics, logEvent } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js';
+
+    const app = initializeApp({
+      apiKey: "AIzaSyCqXSWH99fXl05ETYzTgEI3kWQTwYmxwpw",
+      authDomain: "apd-web-7e28d.firebaseapp.com",
+      projectId: "apd-web-7e28d",
+      storageBucket: "apd-web-7e28d.firebasestorage.app",
+      messagingSenderId: "508825183848",
+      appId: "1:508825183848:web:13838a391bc8c3cd5d3ddd",
+      measurementId: "G-0C0MWCK9TQ"
+    });
+    const analytics = getAnalytics(app);
+
+    // --- Reveal on scroll ---
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(e => {
@@ -579,9 +594,8 @@ footer {
       });
     }, { threshold: 0.15 });
     reveals.forEach(el => observer.observe(el));
-  </script>
-  <script>
-    // Dropdown nav
+
+    // --- Dropdown nav ---
     document.querySelectorAll('.nav-dropdown').forEach(dropdown => {
       const btn = dropdown.querySelector('.nav-dropdown-btn');
       btn.addEventListener('click', (e) => {
@@ -595,6 +609,31 @@ footer {
     document.addEventListener('click', () => {
       document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
     });
+
+    // --- Custom events ---
+    // Hero CTA clicks
+    document.querySelectorAll('.hero-btns .btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        logEvent(analytics, 'cta_click', {
+          page: 'index',
+          label: btn.textContent.trim()
+        });
+      });
+    });
+
+    // About section viewed
+    const aboutSection = document.getElementById('about');
+    if (aboutSection) {
+      const aboutObs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            logEvent(analytics, 'section_view', { section: 'about' });
+            aboutObs.disconnect();
+          }
+        });
+      }, { threshold: 0.3 });
+      aboutObs.observe(aboutSection);
+    }
   </script>
 </body>
 </html>

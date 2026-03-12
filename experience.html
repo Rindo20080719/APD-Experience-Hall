@@ -992,6 +992,25 @@ footer {
   <!-- ================================================================
        JAVASCRIPT
        ================================================================ -->
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js';
+    import { getAnalytics, logEvent } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js';
+
+    const app = initializeApp({
+      apiKey: "AIzaSyCqXSWH99fXl05ETYzTgEI3kWQTwYmxwpw",
+      authDomain: "apd-web-7e28d.firebaseapp.com",
+      projectId: "apd-web-7e28d",
+      storageBucket: "apd-web-7e28d.firebasestorage.app",
+      messagingSenderId: "508825183848",
+      appId: "1:508825183848:web:13838a391bc8c3cd5d3ddd",
+      measurementId: "G-0C0MWCK9TQ"
+    });
+    const analytics = getAnalytics(app);
+    window._analytics = analytics;
+    window._logEvent = logEvent;
+  </script>
+
   <script>
     /* ---- Reveal on scroll ---- */
     const reveals = document.querySelectorAll('.reveal');
@@ -1023,10 +1042,20 @@ footer {
     const noiseFill   = document.getElementById('noiseFill');
     const noiseMeter  = document.getElementById('noiseMeter');
 
+    let noiseTracked25 = false, noiseTracked50 = false, noiseTracked75 = false, noiseTracked100 = false;
+
     noiseSlider.addEventListener('input', () => {
       const level = parseInt(noiseSlider.value);
       noiseFill.style.width  = level + '%';
       noiseMeter.textContent = '環境ノイズ \u00a0' + level + '%';
+
+      // Track noise milestones
+      if (window._logEvent && window._analytics) {
+        if (level >= 25 && !noiseTracked25)  { noiseTracked25 = true;  window._logEvent(window._analytics, 'noise_level', { level: 25 }); }
+        if (level >= 50 && !noiseTracked50)  { noiseTracked50 = true;  window._logEvent(window._analytics, 'noise_level', { level: 50 }); }
+        if (level >= 75 && !noiseTracked75)  { noiseTracked75 = true;  window._logEvent(window._analytics, 'noise_level', { level: 75 }); }
+        if (level >= 100 && !noiseTracked100){ noiseTracked100 = true; window._logEvent(window._analytics, 'noise_level', { level: 100 }); }
+      }
 
       if (level === 0) {
         clearInterval(noiseInterval);
@@ -1123,6 +1152,10 @@ footer {
       if (voicesActive) return;
       voicesActive = true;
 
+      if (window._logEvent && window._analytics) {
+        window._logEvent(window._analytics, 'exhibit_start', { exhibit: 'voices' });
+      }
+
       // Clear
       ['vcontent0','vcontent1','vcontent2'].forEach(id => {
         document.getElementById(id).innerHTML = '';
@@ -1160,6 +1193,13 @@ footer {
     }
 
     function answerVoices(btn, isCorrect) {
+      if (window._logEvent && window._analytics) {
+        window._logEvent(window._analytics, 'quiz_answer', {
+          exhibit: 'voices',
+          correct: isCorrect,
+          selected: btn.textContent.trim()
+        });
+      }
       // disable all options
       document.querySelectorAll('#voicesQuiz .quiz-option').forEach(b => {
         b.disabled = true;
@@ -1198,6 +1238,10 @@ footer {
       if (speedActive) return;
       speedActive = true;
       speedIdx    = 0;
+
+      if (window._logEvent && window._analytics) {
+        window._logEvent(window._analytics, 'exhibit_start', { exhibit: 'speed' });
+      }
 
       document.getElementById('speedStartBtn').disabled = true;
       document.getElementById('speedStartBtn').textContent = '再生中…';
@@ -1246,6 +1290,13 @@ footer {
     }
 
     function answerSpeed(btn, isCorrect) {
+      if (window._logEvent && window._analytics) {
+        window._logEvent(window._analytics, 'quiz_answer', {
+          exhibit: 'speed',
+          correct: isCorrect,
+          selected: btn.textContent.trim()
+        });
+      }
       document.querySelectorAll('#speedQuiz .quiz-option').forEach(b => {
         b.disabled = true;
         if (b === btn) b.classList.add(isCorrect ? 'correct' : 'wrong');
@@ -1277,6 +1328,33 @@ footer {
     document.addEventListener('click', () => {
       document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
     });
+
+    // Track each exhibit section viewed
+    document.querySelectorAll('.exhibit-block').forEach((block, i) => {
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting && window._logEvent && window._analytics) {
+            window._logEvent(window._analytics, 'section_view', { section: 'exhibit_' + (i + 1) });
+            obs.disconnect();
+          }
+        });
+      }, { threshold: 0.3 });
+      obs.observe(block);
+    });
+
+    // Track closing section viewed
+    const closing = document.querySelector('.closing');
+    if (closing) {
+      const closingObs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting && window._logEvent && window._analytics) {
+            window._logEvent(window._analytics, 'section_view', { section: 'experience_closing' });
+            closingObs.disconnect();
+          }
+        });
+      }, { threshold: 0.3 });
+      closingObs.observe(closing);
+    }
   </script>
 </body>
 </html>

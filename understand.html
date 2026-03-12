@@ -687,41 +687,61 @@ footer {
     <p>APD体験館 &nbsp;|&nbsp; 作者 りんどう</p>
   </footer>
 
-  <script>
-    // Reveal on scroll
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js';
+    import { getAnalytics, logEvent } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js';
+
+    const app = initializeApp({
+      apiKey: "AIzaSyCqXSWH99fXl05ETYzTgEI3kWQTwYmxwpw",
+      authDomain: "apd-web-7e28d.firebaseapp.com",
+      projectId: "apd-web-7e28d",
+      storageBucket: "apd-web-7e28d.firebasestorage.app",
+      messagingSenderId: "508825183848",
+      appId: "1:508825183848:web:13838a391bc8c3cd5d3ddd",
+      measurementId: "G-0C0MWCK9TQ"
+    });
+    const analytics = getAnalytics(app);
+    window._analytics = analytics;
+    window._logEvent = logEvent;
+
+    // --- Reveal on scroll ---
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.12 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // ？デコをフォントロード後に表示（FOUT対策）
+    // --- ？デコをフォントロード後に表示（FOUT対策） ---
     document.fonts.ready.then(() => {
       const deco = document.querySelector('.question-deco');
       if (deco) deco.style.opacity = '1';
     });
 
-    // Accordion
+    // --- Accordion ---
     document.querySelectorAll('.accordion-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const item = btn.closest('.accordion-item');
         const isOpen = item.classList.contains('open');
 
-        // Close all
         document.querySelectorAll('.accordion-item').forEach(i => {
           i.classList.remove('open');
           i.querySelector('.accordion-btn').setAttribute('aria-expanded', 'false');
         });
 
-        // Open clicked if it was closed
         if (!isOpen) {
           item.classList.add('open');
           btn.setAttribute('aria-expanded', 'true');
+
+          // Track which accordion was opened
+          logEvent(analytics, 'accordion_open', {
+            page: 'understand',
+            item: btn.textContent.trim()
+          });
         }
       });
     });
-  </script>
-  <script>
-    // Dropdown nav
+
+    // --- Dropdown nav ---
     document.querySelectorAll('.nav-dropdown').forEach(dropdown => {
       const btn = dropdown.querySelector('.nav-dropdown-btn');
       btn.addEventListener('click', (e) => {
@@ -735,6 +755,32 @@ footer {
     document.addEventListener('click', () => {
       document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
     });
+
+    // --- Custom events ---
+    // Finale section viewed
+    const finale = document.querySelector('.finale');
+    if (finale) {
+      const finaleObs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            logEvent(analytics, 'section_view', { section: 'understand_finale' });
+            finaleObs.disconnect();
+          }
+        });
+      }, { threshold: 0.3 });
+      finaleObs.observe(finale);
+    }
+
+    // "体験してみる" CTA
+    const ctaBtn = document.querySelector('.finale-text .btn');
+    if (ctaBtn) {
+      ctaBtn.addEventListener('click', () => {
+        logEvent(analytics, 'cta_click', {
+          page: 'understand',
+          label: ctaBtn.textContent.trim()
+        });
+      });
+    }
   </script>
 </body>
 </html>
