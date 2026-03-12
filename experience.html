@@ -418,14 +418,6 @@ footer {
       margin-bottom: 40px;
       text-align: center;
       min-height: 160px;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.5s ease;
-    }
-
-    .noise-bubble.visible {
-      opacity: 1;
-      visibility: visible;
     }
 
     .noise-speaker {
@@ -813,7 +805,7 @@ footer {
 
         <div class="noise-bubble" id="noiseBubble">
           <p class="noise-speaker" id="noiseSpeaker">友人</p>
-          <div class="noise-text" id="noiseText">ねえ、明日の集まり場所が変わったんだけど、きいてる？</div>
+          <div class="noise-text" id="noiseText">？？？？？？？？？？？？？？？？？？？？？</div>
         </div>
 
         <div style="margin-top: 28px; text-align: center; display: flex; gap: 16px; justify-content: center;">
@@ -1039,50 +1031,29 @@ footer {
         const s = SCENES[currentScene];
         document.getElementById('noiseContext').textContent = s.context;
         document.getElementById('noiseSpeaker').textContent = s.speaker;
-        document.getElementById('noiseText').textContent = s.text;
+        document.getElementById('noiseText').textContent = toQuestion(s.text);
       });
     });
 
+    function toQuestion(text) {
+      return text.split('').map(ch => '　 \n'.includes(ch) ? ch : '？').join('');
+    }
+
     function startNoise() {
-      if (noiseInterval) return;
-      noiseLevel = 0;
-      const text = SCENES[currentScene].text;
-      const bubble = document.getElementById('noiseBubble');
-
-      // バブルを表示（ノイズかかった状態）
-      bubble.classList.add('visible');
-
       // 「体験する」を非表示、「話を見る」「リセット」を表示
       document.getElementById('btnStart').style.display = 'none';
       document.getElementById('btnShow').style.display = '';
       document.getElementById('btnReset').style.display = '';
-
-      // 5秒かけてノイズを0→100%まで増やす
-      const rampInterval = setInterval(() => {
-        noiseLevel = Math.min(noiseLevel + 1, 100);
-        if (noiseLevel >= 100) clearInterval(rampInterval);
-      }, 50);
-
-      noiseInterval = setInterval(() => {
-        document.getElementById('noiseText').textContent =
-          noiseLevel === 0 ? text : applyNoise(text, noiseLevel);
-      }, 80);
     }
 
     function showText() {
-      clearInterval(noiseInterval);
-      noiseInterval = null;
       document.getElementById('noiseText').textContent = SCENES[currentScene].text;
       document.getElementById('btnShow').style.display = 'none';
     }
 
     function resetNoise() {
-      clearInterval(noiseInterval);
-      noiseInterval = null;
-      noiseLevel = 0;
       const s = SCENES[currentScene];
-      document.getElementById('noiseText').textContent = s.text;
-      document.getElementById('noiseBubble').classList.remove('visible');
+      document.getElementById('noiseText').textContent = toQuestion(s.text);
       document.getElementById('btnStart').style.display = '';
       document.getElementById('btnShow').style.display = 'none';
       document.getElementById('btnReset').style.display = 'none';
