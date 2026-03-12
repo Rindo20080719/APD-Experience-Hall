@@ -11,1411 +11,506 @@
   --bg: #0c1525;
   --bg-card: #0f1e38;
   --gold: #c9a84c;
-  --gold-dim: rgba(201, 168, 76, 0.55);
-  --gold-line: rgba(201, 168, 76, 0.22);
-  --gold-line-bright: rgba(201, 168, 76, 0.42);
+  --gold-dim: rgba(201,168,76,0.55);
+  --gold-line: rgba(201,168,76,0.22);
+  --gold-line-bright: rgba(201,168,76,0.42);
   --white: #e4e0d5;
-  --white-dim: rgba(228, 224, 213, 0.72);
+  --white-dim: rgba(228,224,213,0.72);
   --muted: #607090;
 }
 
-*, *::before, *::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html { scroll-behavior: smooth; }
-
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
 body {
   background-color: var(--bg);
   color: var(--white);
-  font-family: 'Noto Serif JP', 'Yu Mincho', '游明朝', serif;
+  font-family: 'Noto Serif JP','Yu Mincho','游明朝',serif;
   line-height: 1.9;
   min-height: 100vh;
+  overflow: hidden;
 }
 
+/* ── NAV ── */
 nav {
   position: fixed;
-  top: 0; left: 0; right: 0;
+  top:0; left:0; right:0;
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 18px 60px;
-  background: rgba(12, 21, 37, 0.96);
+  background: rgba(12,21,37,0.96);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--gold-line);
 }
+.nav-logo { color:var(--gold); text-decoration:none; font-size:1.05rem; font-weight:500; letter-spacing:0.12em; }
+.nav-links { display:flex; align-items:center; gap:52px; list-style:none; }
+.nav-links a { color:var(--white); text-decoration:none; font-family:'Noto Sans JP',sans-serif; font-size:0.88rem; font-weight:300; letter-spacing:0.14em; transition:color 0.3s; }
+.nav-links a:hover, .nav-links a.active { color:var(--gold); }
+.nav-dropdown { position:relative; }
+.nav-dropdown-btn { background:none; border:none; cursor:pointer; color:var(--white); font-family:'Noto Sans JP',sans-serif; font-size:0.88rem; font-weight:300; letter-spacing:0.14em; display:flex; align-items:center; gap:6px; padding:0; transition:color 0.3s; }
+.nav-dropdown-btn:hover { color:var(--gold); }
+.nav-dropdown-arrow { font-size:0.6rem; transition:transform 0.35s ease; display:inline-block; }
+.nav-dropdown.open .nav-dropdown-arrow { transform:rotate(180deg); }
+.nav-dropdown-menu { position:absolute; top:calc(100% + 18px); left:50%; list-style:none; background:rgba(12,21,37,0.97); backdrop-filter:blur(12px); border:1px solid var(--gold-line); border-radius:8px; overflow:hidden; min-width:140px; opacity:0; pointer-events:none; transform:translateX(-50%) translateY(-6px); transition:opacity 0.3s ease,transform 0.3s ease; }
+.nav-dropdown.open .nav-dropdown-menu { opacity:1; pointer-events:auto; transform:translateX(-50%) translateY(0); }
+.nav-dropdown-menu li a { display:block; padding:14px 24px; color:var(--white); font-family:'Noto Sans JP',sans-serif; font-size:0.85rem; font-weight:300; letter-spacing:0.12em; text-decoration:none; transition:background 0.2s,color 0.2s; white-space:nowrap; text-align:center; }
+.nav-dropdown-menu li a:hover { background:rgba(201,168,76,0.1); color:var(--gold); }
+.nav-dropdown-menu li + li { border-top:1px solid var(--gold-line); }
 
-.nav-logo {
-  color: var(--gold);
-  text-decoration: none;
-  font-size: 1.05rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-}
-
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 52px;
-  list-style: none;
-}
-
-.nav-links a {
-  color: var(--white);
-  text-decoration: none;
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 0.88rem;
-  font-weight: 300;
-  letter-spacing: 0.14em;
-  transition: color 0.3s;
-}
-
-.nav-links a:hover,
-.nav-links a.active {
-  color: var(--gold);
-}
-
-.nav-dropdown {
-  position: relative;
-}
-
-.nav-dropdown-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--white);
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 0.88rem;
-  font-weight: 300;
-  letter-spacing: 0.14em;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0;
-  transition: color 0.3s;
-}
-
-.nav-dropdown-btn:hover {
-  color: var(--gold);
-}
-
-.nav-dropdown-arrow {
-  font-size: 0.6rem;
-  transition: transform 0.35s ease;
-  display: inline-block;
-}
-
-.nav-dropdown.open .nav-dropdown-arrow {
-  transform: rotate(180deg);
-}
-
-.nav-dropdown-menu {
-  position: absolute;
-  top: calc(100% + 18px);
-  left: 50%;
-  transform: translateX(-50%);
-  list-style: none;
-  background: rgba(12, 21, 37, 0.97);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--gold-line);
-  border-radius: 8px;
+/* ── SLIDESHOW ── */
+#slideshow {
+  position: fixed;
+  top: 57px; left:0; right:0; bottom:0;
+  z-index: 500;
+  background: var(--bg);
   overflow: hidden;
-  min-width: 140px;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 80px;
   opacity: 0;
   pointer-events: none;
-  transform: translateX(-50%) translateY(-6px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.nav-dropdown.open .nav-dropdown-menu {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateX(-50%) translateY(0);
-}
-
-.nav-dropdown-menu li a {
-  display: block;
-  padding: 14px 24px;
-  color: var(--white);
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 300;
-  letter-spacing: 0.12em;
-  text-decoration: none;
-  transition: background 0.2s, color 0.2s;
-  white-space: nowrap;
+  transition: opacity 0.75s ease;
   text-align: center;
 }
+.slide.active { opacity:1; pointer-events:auto; }
 
-.nav-dropdown-menu li a:hover {
-  background: rgba(201, 168, 76, 0.1);
-  color: var(--gold);
-}
+/* story slides are clickable */
+.slide[data-type="story"] { cursor:pointer; }
 
-.nav-dropdown-menu li + li {
-  border-top: 1px solid var(--gold-line);
-}
-
-.deco {
-  height: 1px;
-  background: var(--gold-line);
-  position: relative;
-  overflow: hidden;
-}
-
-.deco::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -180px;
-  width: 180px;
-  height: 1px;
-  background: linear-gradient(to right,
-    transparent,
-    rgba(201, 168, 76, 0.9) 50%,
-    transparent
-  );
-  animation: lineSweep 9s ease-in-out infinite;
-}
-
-@keyframes lineSweep {
-  0%   { left: -180px; }
-  100% { left: calc(100% + 180px); }
-}
-
-@keyframes slideRight {
-  0%   { transform: translateX(0px); }
-  50%  { transform: translateX(28px); }
-  100% { transform: translateX(0px); }
-}
-
-@keyframes slideLeft {
-  0%   { transform: translateX(0px); }
-  50%  { transform: translateX(-28px); }
-  100% { transform: translateX(0px); }
-}
-
-@keyframes slideOscillate {
-  0%   { transform: translateX(-14px); }
-  50%  { transform: translateX(14px); }
-  100% { transform: translateX(-14px); }
-}
-
-.deco-l {
-  width: 68%;
-  animation: slideRight 11s ease-in-out infinite;
-}
-.deco-l::after { animation-delay: 0s; }
-
-.deco-r {
-  width: 68%;
-  margin-left: auto;
-  animation: slideLeft 9.5s ease-in-out infinite;
-  animation-delay: -4s;
-}
-.deco-r::after { animation-delay: -3.2s; }
-
-.deco-mid {
-  width: 52%;
-  margin: 0 auto;
-  animation: slideOscillate 13s ease-in-out infinite;
-  animation-delay: -6s;
-}
-.deco-mid::after { animation-delay: -6.5s; }
-
-.deco-full { width: 100%; }
-.deco-full::after { animation-delay: -1.8s; }
-
-.deco-bright { background: var(--gold-line-bright); }
-
-.section {
-  padding: 100px 80px;
-  position: relative;
-}
-
-.section-inner {
-  max-width: 900px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.section-label {
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 0.82rem;
-  color: var(--gold);
-  letter-spacing: 0.22em;
-  font-weight: 300;
-  margin-bottom: 18px;
-}
-
-.section h2 {
-  font-size: 3.6rem;
+/* ── SLIDE ELEMENTS ── */
+.slide-title {
+  font-size: clamp(2.2rem,4vw,3.2rem);
   font-weight: 400;
-  letter-spacing: 0.04em;
-  line-height: 1.3;
-  margin-bottom: 48px;
+  letter-spacing: 0.14em;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  margin-bottom: 56px;
 }
+.slide-title::before, .slide-title::after { content:'—'; color:var(--gold-dim); }
 
-.section p {
-  font-size: 0.98rem;
-  line-height: 2.1;
-  color: var(--white-dim);
-  font-weight: 300;
-}
-
-.highlight { color: var(--gold); }
-
-.btn {
-  display: inline-block;
-  padding: 14px 52px;
-  border: 1.5px solid var(--gold);
-  border-radius: 40px;
-  color: var(--white);
-  text-decoration: none;
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 0.92rem;
-  font-weight: 300;
-  letter-spacing: 0.18em;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  background: transparent;
-}
-
-.btn:hover {
-  background: rgba(201, 168, 76, 0.14);
-  color: var(--gold);
-}
-
-footer {
-  padding: 50px 80px;
-  text-align: center;
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 0.78rem;
-  color: var(--muted);
+.slide-section {
+  font-size: clamp(1.1rem,2vw,1.6rem);
   font-weight: 300;
   letter-spacing: 0.1em;
-  border-top: 1px solid var(--gold-line);
+  color: var(--white-dim);
+  display: flex;
+  align-items: baseline;
+  gap: 28px;
+}
+.slide-num { font-family:'Noto Sans JP',sans-serif; font-size:clamp(1.6rem,3vw,2.2rem); font-weight:300; color:var(--white-dim); }
+
+.slide-caption {
+  font-size: clamp(1rem,2vw,1.55rem);
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  line-height: 2;
+  margin-top: 0;
+  white-space: pre-line;
+  text-align: center;
 }
 
-.reveal {
-  opacity: 0;
-  transform: translateY(36px);
-  transition: opacity 0.9s ease, transform 0.9s ease;
+.tap-hint {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Noto Sans JP',sans-serif;
+  font-size: 0.78rem;
+  color: var(--white-dim);
+  letter-spacing: 0.2em;
+  font-weight: 300;
+  pointer-events: none;
+  white-space: nowrap;
+  animation: hintPulse 2.4s ease-in-out infinite;
 }
+@keyframes hintPulse { 0%,100%{opacity:0.45} 50%{opacity:1} }
 
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
+/* ── EXHIBIT SLIDES ── */
+.slide-exhibit {
+  cursor: default;
+  padding: 72px 60px 32px;
+  overflow-y: auto;
+  align-items: stretch;
+  justify-content: flex-start;
 }
-
-.reveal-delay-1 { transition-delay: 0.15s; }
-.reveal-delay-2 { transition-delay: 0.30s; }
-.reveal-delay-3 { transition-delay: 0.45s; }
-.reveal-delay-4 { transition-delay: 0.60s; }
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(28px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-    /* ===== EXPERIENCE SPECIFIC ===== */
-
-    /* Header */
-    .page-hero {
-      padding: 150px 80px 70px;
-      text-align: center;
-    }
-
-    .page-hero .label {
-      font-family: 'Noto Sans JP', sans-serif;
-      font-size: 0.82rem;
-      color: var(--gold);
-      letter-spacing: 0.24em;
-      font-weight: 300;
-      margin-bottom: 18px;
-    }
-
-    .page-hero h1 {
-      font-size: 2.1rem;
-      font-weight: 400;
-      letter-spacing: 0.14em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 22px;
-    }
-
-    .page-hero h1::before,
-    .page-hero h1::after {
-      content: '—';
-      color: var(--gold-dim);
-    }
-
-    .page-hero .intro {
-      margin-top: 36px;
-      font-size: 0.94rem;
-      color: var(--white-dim);
-      font-weight: 300;
-      line-height: 2.1;
-    }
-
-    /* Exhibit container */
-    .exhibit-block {
-      padding: 90px 80px;
-      position: relative;
-    }
-
-    .exhibit-number {
-      font-family: 'Noto Sans JP', sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.3em;
-      color: var(--gold-dim);
-      font-weight: 300;
-      margin-bottom: 10px;
-    }
-
-    .exhibit-block h2 {
-      font-size: 2.4rem;
-      font-weight: 400;
-      letter-spacing: 0.06em;
-      margin-bottom: 14px;
-    }
-
-    .exhibit-block .situation {
-      font-size: 0.84rem;
-      font-family: 'Noto Sans JP', sans-serif;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      margin-bottom: 48px;
-      font-weight: 300;
-    }
-
-    /* ========================
-       EXHIBIT 1: NOISE SLIDER
-       ======================== */
-    .noise-scene {
-      max-width: 760px;
-      margin: 0 auto;
-    }
-
-    .noise-context {
-      font-size: 0.84rem;
-      color: var(--muted);
-      font-family: 'Noto Sans JP', sans-serif;
-      margin-bottom: 28px;
-      font-weight: 300;
-      line-height: 1.7;
-    }
-
-    .noise-bubble {
-      background: var(--bg-card);
-      border: 1px solid var(--gold-line);
-      border-radius: 8px;
-      padding: 32px 40px;
-      margin-bottom: 40px;
-      text-align: center;
-      min-height: 160px;
-    }
-
-    .noise-speaker {
-      font-family: 'Noto Sans JP', sans-serif;
-      font-size: 0.78rem;
-      color: var(--gold-dim);
-      letter-spacing: 0.14em;
-      margin-bottom: 14px;
-      font-weight: 300;
-    }
-
-    .noise-text {
-      font-size: 1.35rem;
-      line-height: 2.1;
-      letter-spacing: 0.04em;
-      min-height: 80px;
-      font-weight: 300;
-      transition: none;
-      white-space: pre-wrap;
-      word-break: break-all;
-    }
-
-    .playing-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-family: 'Noto Sans JP', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 300;
-      letter-spacing: 0.12em;
-      color: var(--gold);
-    }
-
-    .playing-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--gold);
-      animation: pulse 1.2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50%       { opacity: 0.3; transform: scale(0.7); }
-    }
-
-    .scene-tabs {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      margin-bottom: 28px;
-    }
-
-    .scene-tab {
-      background: transparent;
-      border: 1px solid var(--gold-line);
-      border-radius: 999px;
-      color: var(--muted);
-      font-family: 'Noto Sans JP', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 300;
-      letter-spacing: 0.12em;
-      padding: 10px 28px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .scene-tab:hover {
-      border-color: var(--gold-dim);
-      color: var(--white);
-    }
-
-    .scene-tab.active {
-      border-color: var(--gold);
-      color: var(--gold);
-      background: rgba(201, 168, 76, 0.08);
-    }
-
-    /* ========================
-       EXHIBIT 2: MULTI VOICE
-       ======================== */
-    .voices-stage {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .voices-instruction {
-      font-size: 0.88rem;
-      color: var(--white-dim);
-      margin-bottom: 36px;
-      line-height: 1.9;
-      font-weight: 300;
-    }
-
-    .voices-instruction .target-name {
-      color: var(--gold);
-      font-weight: 400;
-    }
-
-    .voices-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 36px;
-    }
-
-    .voice-box {
-      background: var(--bg-card);
-      border: 1px solid var(--gold-line);
-      border-radius: 8px;
-      padding: 24px 20px;
-      min-height: 220px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .voice-box.is-target {
-      border-color: var(--gold-dim);
-    }
-
-    .voice-name {
-      font-family: 'Noto Sans JP', sans-serif;
-      font-size: 0.76rem;
-      letter-spacing: 0.14em;
-      margin-bottom: 14px;
-      font-weight: 400;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--gold-line);
-    }
-
-    .voice-box.is-target .voice-name {
-      color: var(--gold);
-    }
-
-    .voice-topic {
-      font-size: 0.72rem;
-      color: var(--muted);
-      font-weight: 300;
-      letter-spacing: 0.08em;
-      margin-left: 8px;
-    }
-
-    .voice-content {
-      font-size: 0.9rem;
-      line-height: 2;
-      font-weight: 300;
-      color: var(--white-dim);
-    }
-
-    .voice-box.is-target .voice-content {
-      color: var(--white);
-    }
-
-    .voice-phrase {
-      display: block;
-      animation: voiceFadeIn 0.4s ease forwards;
-      margin-bottom: 4px;
-    }
-
-    @keyframes voiceFadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .voices-controls {
-      text-align: center;
-      margin-bottom: 24px;
-    }
-
-    .timer-bar {
-      width: 100%;
-      height: 2px;
-      background: var(--bg-card);
-      border-radius: 1px;
-      margin-top: 20px;
-      overflow: hidden;
-    }
-
-    .timer-fill {
-      height: 100%;
-      background: var(--gold);
-      border-radius: 1px;
-      transition: width 0.5s linear;
-    }
-
-    /* Quiz */
-    .quiz-box {
-      display: none;
-      background: var(--bg-card);
-      border: 1px solid var(--gold-line-bright);
-      border-radius: 8px;
-      padding: 36px 40px;
-      display: none;
-      text-align: left;
-    }
-
-    .quiz-box.show { display: block; }
-
-    .quiz-q {
-      font-size: 1rem;
-      margin-bottom: 24px;
-      font-weight: 400;
-      letter-spacing: 0.06em;
-    }
-
-    .quiz-options {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .quiz-option {
-      padding: 14px 22px;
-      border: 1px solid var(--gold-line);
-      border-radius: 6px;
-      cursor: pointer;
-      font-family: 'Noto Serif JP', serif;
-      font-size: 0.9rem;
-      font-weight: 300;
-      color: var(--white-dim);
-      background: transparent;
-      text-align: left;
-      transition: all 0.25s;
-      letter-spacing: 0.04em;
-    }
-
-    .quiz-option:hover { border-color: var(--gold-dim); color: var(--white); }
-    .quiz-option.correct { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.08); }
-    .quiz-option.wrong   { border-color: #8b4444; color: #c07070; }
-
-    .quiz-result {
-      margin-top: 24px;
-      padding: 20px;
-      border-top: 1px solid var(--gold-line);
-      font-size: 0.88rem;
-      color: var(--white-dim);
-      line-height: 1.9;
-      display: none;
-    }
-
-    .quiz-result.show { display: block; }
-
-    /* ========================
-       EXHIBIT 3: SPEED
-       ======================== */
-    .speed-scene {
-      max-width: 760px;
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    .speed-instruction {
-      font-size: 0.88rem;
-      color: var(--white-dim);
-      margin-bottom: 36px;
-      line-height: 1.9;
-      font-weight: 300;
-    }
-
-    .speed-stage {
-      background: var(--bg-card);
-      border: 1px solid var(--gold-line);
-      border-radius: 8px;
-      padding: 50px 40px;
-      min-height: 180px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 36px;
-      position: relative;
-    }
-
-    .speed-word {
-      font-size: 2.2rem;
-      font-weight: 300;
-      letter-spacing: 0.1em;
-      text-align: center;
-      transition: opacity 0.18s ease;
-    }
-
-    .speed-word.hidden { opacity: 0; }
-
-    .speed-progress {
-      font-family: 'Noto Sans JP', sans-serif;
-      font-size: 0.76rem;
-      color: var(--muted);
-      font-weight: 300;
-      letter-spacing: 0.12em;
-      position: absolute;
-      bottom: 14px;
-      right: 18px;
-    }
-
-    .speed-controls { text-align: center; margin-bottom: 24px; }
-
-    /* Closing section */
-    .closing {
-      padding: 90px 80px;
-      text-align: center;
-    }
-
-    .closing-inner {
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    .closing h2 {
-      font-size: 2rem;
-      font-weight: 400;
-      letter-spacing: 0.06em;
-      margin-bottom: 36px;
-      line-height: 1.5;
-    }
-
-    .closing p {
-      font-size: 0.94rem;
-      line-height: 2.2;
-      color: var(--white-dim);
-      font-weight: 300;
-      margin-bottom: 40px;
-    }
-
-    .closing-btns {
-      display: flex;
-      gap: 28px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    /* ========================
-       RESET BTN
-       ======================== */
-    .exp-btn {
-      display: inline-block;
-      padding: 12px 42px;
-      border: 1.5px solid var(--gold);
-      border-radius: 40px;
-      color: var(--white);
-      font-family: 'Noto Sans JP', sans-serif;
-      font-size: 0.88rem;
-      font-weight: 300;
-      letter-spacing: 0.16em;
-      transition: all 0.3s;
-      cursor: pointer;
-      background: transparent;
-    }
-
-    .exp-btn:hover {
-      background: rgba(201,168,76,0.14);
-      color: var(--gold);
-    }
-
-    .exp-btn:disabled {
-      opacity: 0.4;
-      cursor: default;
-    }
-
-    .exp-btn.active {
-      background: rgba(201,168,76,0.12);
-      border-color: var(--gold);
-      color: var(--gold);
-    }
+.slide-exhibit-inner { max-width:860px; margin:0 auto; width:100%; }
+.ex-label { font-family:'Noto Sans JP',sans-serif; font-size:0.72rem; color:var(--gold-dim); letter-spacing:0.28em; font-weight:300; margin-bottom:6px; text-align:center; }
+.ex-title { font-size:clamp(1.5rem,3vw,2rem); font-weight:400; letter-spacing:0.06em; margin-bottom:28px; text-align:center; }
+
+.next-wrap { text-align:center; margin-top:36px; display:none; }
+.next-wrap.show { display:block; }
+
+/* ── BUTTONS ── */
+.btn { display:inline-block; padding:14px 52px; border:1.5px solid var(--gold); border-radius:40px; color:var(--white); text-decoration:none; font-family:'Noto Sans JP',sans-serif; font-size:0.92rem; font-weight:300; letter-spacing:0.18em; transition:all 0.3s ease; cursor:pointer; background:transparent; }
+.btn:hover { background:rgba(201,168,76,0.14); color:var(--gold); }
+.exp-btn { display:inline-block; padding:11px 36px; border:1.5px solid var(--gold); border-radius:40px; color:var(--white); font-family:'Noto Sans JP',sans-serif; font-size:0.86rem; font-weight:300; letter-spacing:0.16em; transition:all 0.3s; cursor:pointer; background:transparent; }
+.exp-btn:hover { background:rgba(201,168,76,0.14); color:var(--gold); }
+.exp-btn:disabled { opacity:0.4; cursor:default; }
+
+/* ── EXHIBIT 01 ── */
+.noise-scene { max-width:720px; margin:0 auto; }
+.noise-ctx { font-size:0.83rem; color:var(--muted); font-family:'Noto Sans JP',sans-serif; margin-bottom:18px; font-weight:300; line-height:1.7; text-align:center; }
+.noise-bubble { background:var(--bg-card); border:1px solid var(--gold-line); border-radius:8px; padding:26px 36px; margin-bottom:24px; text-align:center; min-height:130px; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.noise-spk { font-family:'Noto Sans JP',sans-serif; font-size:0.76rem; color:var(--gold-dim); letter-spacing:0.14em; margin-bottom:10px; font-weight:300; }
+.noise-txt { font-size:1.18rem; line-height:2; letter-spacing:0.04em; font-weight:300; white-space:pre-wrap; }
+.scene-tabs { display:flex; gap:10px; justify-content:center; margin-bottom:18px; }
+.scene-tab { background:transparent; border:1px solid var(--gold-line); border-radius:999px; color:var(--muted); font-family:'Noto Sans JP',sans-serif; font-size:0.83rem; font-weight:300; letter-spacing:0.12em; padding:8px 22px; cursor:pointer; transition:all 0.3s ease; }
+.scene-tab:hover { border-color:var(--gold-dim); color:var(--white); }
+.scene-tab.active { border-color:var(--gold); color:var(--gold); background:rgba(201,168,76,0.08); }
+.playing-badge { display:inline-flex; align-items:center; gap:8px; font-family:'Noto Sans JP',sans-serif; font-size:0.84rem; font-weight:300; letter-spacing:0.12em; color:var(--gold); }
+.playing-dot { width:8px; height:8px; border-radius:50%; background:var(--gold); animation:pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(0.7)} }
+
+
+/* ── QUIZ ── */
+.quiz-box { display:none; background:var(--bg-card); border:1px solid var(--gold-line-bright); border-radius:8px; padding:26px 30px; text-align:left; margin-top:18px; }
+.quiz-box.show { display:block; }
+.quiz-q { font-size:0.94rem; margin-bottom:18px; font-weight:400; letter-spacing:0.06em; }
+.quiz-options { display:flex; flex-direction:column; gap:9px; }
+.quiz-option { padding:11px 18px; border:1px solid var(--gold-line); border-radius:6px; cursor:pointer; font-family:'Noto Serif JP',serif; font-size:0.87rem; font-weight:300; color:var(--white-dim); background:transparent; text-align:left; transition:all 0.25s; letter-spacing:0.04em; }
+.quiz-option:hover { border-color:var(--gold-dim); color:var(--white); }
+.quiz-option.correct { border-color:var(--gold); color:var(--gold); background:rgba(201,168,76,0.08); }
+.quiz-option.wrong { border-color:#8b4444; color:#c07070; }
+.quiz-result { margin-top:18px; padding:14px; border-top:1px solid var(--gold-line); font-size:0.85rem; color:var(--white-dim); line-height:1.9; display:none; }
+.quiz-result.show { display:block; }
+
+/* ── CLOSING ── */
+.slide-close p { font-size:0.94rem; line-height:2.2; color:var(--white-dim); font-weight:300; margin-bottom:40px; max-width:580px; }
+.close-btns { display:flex; gap:24px; justify-content:center; flex-wrap:wrap; }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a href="index.html" class="nav-logo">APD体験館</a>
-    <ul class="nav-links">
-      <li class="nav-dropdown">
-        <button class="nav-dropdown-btn">相談する <span class="nav-dropdown-arrow">▼</span></button>
-        <ul class="nav-dropdown-menu">
-          <li><a href="https://apd-peer.jimdofree.com/%E5%80%8B%E5%88%A5%E7%9B%B8%E8%AB%87/" target="_blank" rel="noopener">個別相談</a></li>
-          <li><a href="https://line.me/ti/g2/avoAahmHoH8aKvYKPfHE_g?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank" rel="noopener">オープンチャット</a></li>
-        </ul>
-      </li>
-      <li><a href="understand.html">理解する</a></li>
-      <li><a href="experience.html" class="active">体験する</a></li>
-    </ul>
-  </nav>
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">APD体験館</a>
+  <ul class="nav-links">
+    <li class="nav-dropdown">
+      <button class="nav-dropdown-btn">相談する <span class="nav-dropdown-arrow">▼</span></button>
+      <ul class="nav-dropdown-menu">
+        <li><a href="https://line.me/ti/g2/avoAahmHoH8aKvYKPfHE_g?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank" rel="noopener">オープンチャット</a></li>
+      </ul>
+    </li>
+    <li><a href="understand.html">理解する</a></li>
+    <li><a href="experience.html" class="active">体験する</a></li>
+  </ul>
+</nav>
 
-  <!-- PAGE HEADER -->
-  <div class="deco deco-full" style="margin-top: 56px;"></div>
+<!-- ════════════════════════════════
+     SLIDESHOW
+     ════════════════════════════════ -->
+<div id="slideshow">
 
-  <header class="page-hero">
-    <p class="label reveal">体験する</p>
-    <h1 class="reveal reveal-delay-1">私が聴いている世界</h1>
-    <p class="intro reveal reveal-delay-2">
-      実際に操作しながら、APDのある日常を体感してみてください。<br>
-      これは私が毎日経験していることです。
+  <!-- 0: タイトル -->
+  <div class="slide active" data-type="story" id="s0">
+    <p class="slide-title">体験する</p>
+    <button class="btn" onclick="nextSlide(event)">体験する</button>
+    <p style="margin-top:28px;font-family:'Noto Sans JP',sans-serif;font-size:0.75rem;color:var(--muted);font-weight:300;letter-spacing:0.1em;line-height:2;">
+      ※ この体験はAPDを持たない方に聴こえ方を知っていただくために作られました。<br>
+      実際の症状とは異なる場合があり、一部誇張した表現を含みます。
     </p>
-  </header>
+  </div>
 
-  <div class="deco deco-r reveal"></div>
+  <!-- 1: 展示1 セクション見出し -->
+  <div class="slide" data-type="story" id="s1">
+    <div class="slide-section">
+      <span>騒音の中、話を聴いてみよう</span>
+    </div>
+    <span class="tap-hint">タップ・クリックして進む</span>
+  </div>
 
-  <!-- ================================================================
-       EXHIBIT 1: ノイズの中の会話
-       ================================================================ -->
-  <section class="exhibit-block">
-    <div class="deco deco-l" style="margin-bottom: 70px;"></div>
+  <!-- 2: 普通の耳 -->
+  <div class="slide" data-type="story" id="s2">
+    <p class="slide-caption">静かな場所では、話し声を問題なく聞き取れます</p>
+    <span class="tap-hint">タップ・クリックして進む</span>
+  </div>
 
-    <div class="reveal">
-      <p class="exhibit-number">展示  01</p>
-      <h2>ノイズの中の会話</h2>
-      <p class="situation">状況を選んで、体験してみてください</p>
+  <!-- 3: APDの耳 -->
+  <div class="slide" data-type="story" id="s3">
+    <p class="slide-caption">でも、APDのある人は<br>騒がしい場所で話を聞き分けることが苦手です</p>
+    <span class="tap-hint">タップ・クリックして進む</span>
+  </div>
 
+  <!-- 4: 体験へ誘導 -->
+  <div class="slide" data-type="story" id="s4">
+    <p class="slide-caption">実際にどんな聴こえ方なのか、<br>体験してみてください</p>
+    <span class="tap-hint">タップ・クリックして進む</span>
+  </div>
+
+  <!-- ═══ EXHIBIT 01-A: 学校 ═══ -->
+  <div class="slide slide-exhibit" data-type="exhibit" id="s-ex1a">
+    <div class="slide-exhibit-inner">
+      <p class="ex-label">シーン  1 / 3</p>
+      <h2 class="ex-title">ノイズの中の会話</h2>
       <div class="noise-scene">
-        <div class="scene-tabs">
-          <button class="scene-tab active" data-scene="school">学校</button>
-          <button class="scene-tab" data-scene="station">駅</button>
-          <button class="scene-tab" data-scene="construction">工事現場</button>
+        <p class="noise-ctx" id="ctx1">授業の合間、騒がしい教室の中で友人が話しかけてきました。</p>
+        <div class="noise-bubble">
+          <p class="noise-spk">友人</p>
+          <div class="noise-txt" id="txt1">話の内容を聴き取ってみましょう</div>
         </div>
-
-        <p class="noise-context" id="noiseContext">
-          授業の合間、騒がしい教室の中で先生が話しかけてきました。
-        </p>
-
-        <div class="noise-bubble" id="noiseBubble">
-          <p class="noise-speaker" id="noiseSpeaker">友人</p>
-          <div class="noise-text" id="noiseText">話の内容を聴き取ってみましょう</div>
-        </div>
-
-        <audio id="noiseAudio"></audio>
-
-        <div style="margin-top: 28px; text-align: center; display: flex; gap: 16px; justify-content: center; align-items: center;">
-          <button class="exp-btn" id="btnStart" onclick="startNoise()">体験する</button>
-          <span class="playing-badge" id="playingBadge" style="display:none;"><span class="playing-dot"></span>再生中</span>
-          <button class="exp-btn" id="btnShow" onclick="toggleText()" style="display:none;">話を表示・非表示</button>
-          <button class="exp-btn" id="btnReset" onclick="resetNoise()" style="display:none;">リセット</button>
+        <audio id="audio1" src="audio-school.mp3"></audio>
+        <div style="margin-top:18px;text-align:center;display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;">
+          <button class="exp-btn" id="start1" onclick="startScene(1)">体験する</button>
+          <span class="playing-badge" id="badge1" style="display:none;"><span class="playing-dot"></span>再生中</span>
+          <button class="exp-btn" id="show1" onclick="toggleScene(1)" style="display:none;">話を表示する</button>
+          <button class="exp-btn" id="reset1" onclick="resetScene(1)" style="display:none;">リセット</button>
         </div>
       </div>
-    </div>
-
-    <div class="deco deco-r" style="margin-top: 70px;"></div>
-  </section>
-
-  <div class="deco deco-full"></div>
-
-  <!-- ================================================================
-       EXHIBIT 2: 複数の声
-       ================================================================ -->
-  <section class="exhibit-block">
-    <div class="deco deco-r" style="margin-bottom: 70px;"></div>
-
-    <div class="reveal">
-      <p class="exhibit-number">展示  02</p>
-      <h2>複数の声の中で</h2>
-      <p class="situation">状況 — 複数人が話している中、田中さんと話し始めました</p>
-
-      <div class="voices-stage">
-        <p class="voices-instruction">
-          <span class="target-name">田中さん</span>の話だけを追ってください。<br>
-          10秒後に、田中さんが話した内容についてのクイズが出ます。
-        </p>
-
-        <audio id="audioSato"   src="audio-sato.mp3"></audio>
-        <audio id="audioTanaka" src="audio-tanaka.mp3"></audio>
-        <audio id="audioSuzuki" src="audio-suzuki.mp3"></audio>
-
-        <div class="voices-controls">
-          <button class="exp-btn" id="voicesStartBtn" onclick="startVoices()">体験を開始する</button>
-        </div>
-
-        <div class="voices-grid" id="voicesGrid" style="opacity: 0.3; pointer-events: none;">
-          <div class="voice-box" id="vbox0">
-            <div class="voice-name">佐藤さん <span class="voice-topic" id="vtopic0">映画の感想</span></div>
-            <div class="voice-content" id="vcontent0"></div>
-          </div>
-          <div class="voice-box is-target" id="vbox1">
-            <div class="voice-name">田中さん ★ <span class="voice-topic" id="vtopic1">旅行の持ち物・集合場所</span></div>
-            <div class="voice-content" id="vcontent1"></div>
-          </div>
-          <div class="voice-box" id="vbox2">
-            <div class="voice-name">鈴木さん <span class="voice-topic" id="vtopic2">仕事のプロジェクト</span></div>
-            <div class="voice-content" id="vcontent2"></div>
-          </div>
-        </div>
-
-        <div class="timer-bar" id="timerBar" style="display:none;">
-          <div class="timer-fill" id="timerFill" style="width:100%"></div>
-        </div>
-
-        <!-- Quiz -->
-        <div class="quiz-box" id="voicesQuiz">
-          <p class="quiz-q">田中さんの集合場所はどこでしたか？</p>
-          <div class="quiz-options">
-            <button class="quiz-option" onclick="answerVoices(this, false)">渋谷駅の東口</button>
-            <button class="quiz-option" onclick="answerVoices(this, true)">新宿駅の南口</button>
-            <button class="quiz-option" onclick="answerVoices(this, false)">池袋駅の西口</button>
-            <button class="quiz-option" onclick="answerVoices(this, false)">東京駅の中央口</button>
-          </div>
-          <div class="quiz-result" id="voicesResult"></div>
-        </div>
-
+      <div class="next-wrap" id="next1">
+        <button class="btn" onclick="nextSlide(event)">次のシーンへ &rsaquo;</button>
       </div>
     </div>
+  </div>
 
-    <div class="deco deco-l" style="margin-top: 70px;"></div>
-  </section>
-
-  <div class="deco deco-full"></div>
-
-  <!-- ================================================================
-       EXHIBIT 3: 消える言葉
-       ================================================================ -->
-  <section class="exhibit-block">
-    <div class="deco deco-l" style="margin-bottom: 70px;"></div>
-
-    <div class="reveal">
-      <p class="exhibit-number">展示  03</p>
-      <h2>消える言葉</h2>
-      <p class="situation">状況 — 先生が連絡事項を話しています</p>
-
-      <div class="speed-scene">
-        <p class="speed-instruction">
-          言葉が一語ずつ表示されます。<br>
-          音声は巻き戻せません。これが私の日常です。<br>
-          全て見終わったあと、内容についてのクイズがあります。
-        </p>
-
-        <div class="speed-controls">
-          <button class="exp-btn" id="speedStartBtn" onclick="startSpeed()">再生を開始する</button>
+  <!-- ═══ EXHIBIT 01-B: 駅 ═══ -->
+  <div class="slide slide-exhibit" data-type="exhibit" id="s-ex1b">
+    <div class="slide-exhibit-inner">
+      <p class="ex-label">シーン  2 / 3</p>
+      <h2 class="ex-title">ノイズの中の会話</h2>
+      <div class="noise-scene">
+        <p class="noise-ctx" id="ctx2">駅のホームで友人と会話をしていると、電車が通過していきました。</p>
+        <div class="noise-bubble">
+          <p class="noise-spk">友人</p>
+          <div class="noise-txt" id="txt2">話の内容を聴き取ってみましょう</div>
         </div>
-
-        <div class="speed-stage">
-          <div class="speed-word hidden" id="speedWord">—</div>
-          <div class="speed-progress" id="speedProgress"></div>
+        <audio id="audio2" src="audio-station.mp3"></audio>
+        <div style="margin-top:18px;text-align:center;display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;">
+          <button class="exp-btn" id="start2" onclick="startScene(2)">体験する</button>
+          <span class="playing-badge" id="badge2" style="display:none;"><span class="playing-dot"></span>再生中</span>
+          <button class="exp-btn" id="show2" onclick="toggleScene(2)" style="display:none;">話を表示する</button>
+          <button class="exp-btn" id="reset2" onclick="resetScene(2)" style="display:none;">リセット</button>
         </div>
+      </div>
+      <div class="next-wrap" id="next2">
+        <button class="btn" onclick="nextSlide(event)">次のシーンへ &rsaquo;</button>
+      </div>
+    </div>
+  </div>
 
-        <!-- Quiz -->
-        <div class="quiz-box" id="speedQuiz">
-          <p class="quiz-q">今の連絡事項は何についてでしたか？</p>
+  <!-- ═══ EXHIBIT 01-C: 工事現場 ═══ -->
+  <div class="slide slide-exhibit" data-type="exhibit" id="s-ex1c">
+    <div class="slide-exhibit-inner">
+      <p class="ex-label">シーン  3 / 3</p>
+      <h2 class="ex-title">ノイズの中の会話</h2>
+      <div class="noise-scene">
+        <p class="noise-ctx" id="ctx3">工事現場で、先輩が話しかけてきました。</p>
+        <div class="noise-bubble">
+          <p class="noise-spk">先輩</p>
+          <div class="noise-txt" id="txt3">話の内容を聴き取ってみましょう</div>
+        </div>
+        <audio id="audio3" src="audio-construction.mp3"></audio>
+        <div style="margin-top:18px;text-align:center;display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;">
+          <button class="exp-btn" id="start3" onclick="startScene(3)">体験する</button>
+          <span class="playing-badge" id="badge3" style="display:none;"><span class="playing-dot"></span>再生中</span>
+          <button class="exp-btn" id="show3" onclick="toggleScene(3)" style="display:none;">話を表示する</button>
+          <button class="exp-btn" id="reset3" onclick="resetScene(3)" style="display:none;">リセット</button>
+        </div>
+      </div>
+      <div class="next-wrap" id="next3">
+        <button class="btn" onclick="nextSlide(event)">まとめへ &rsaquo;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ EXHIBIT 03 (非表示中・復活可) ═══
+  <div class="slide slide-exhibit" data-type="exhibit" id="s-ex3">
+    <div class="slide-exhibit-inner">
+      <p class="ex-label">展示  03</p>
+      <h2 class="ex-title">早口が苦手</h2>
+      <div class="noise-scene" style="text-align:center;">
+        <p class="noise-ctx">授業終わりに、先生が早口で連絡事項を伝えてきました。</p>
+        <div class="noise-bubble">
+          <p class="noise-spk">先生</p>
+          <div class="noise-txt" id="speedText">話の内容を聴き取ってみましょう</div>
+        </div>
+        <audio id="audio03" src="audio-03.mp3"></audio>
+        <div style="margin-top:18px;display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;">
+          <button class="exp-btn" id="speedStartBtn" onclick="startSpeed()">体験する</button>
+          <span class="playing-badge" id="speedPlayingBadge" style="display:none;"><span class="playing-dot"></span>再生中</span>
+          <button class="exp-btn" id="speedShowBtn" onclick="toggleSpeedText()" style="display:none;">話を表示する</button>
+          <button class="exp-btn" id="speedResetBtn" onclick="resetSpeed()" style="display:none;">リセット</button>
+        </div>
+        <div class="quiz-box" id="speedQuiz" style="margin-top:22px;">
+          <p class="quiz-q">集合場所はどこに変更されましたか？</p>
           <div class="quiz-options">
-            <button class="quiz-option" onclick="answerSpeed(this, false)">明日の授業の課題について</button>
-            <button class="quiz-option" onclick="answerSpeed(this, true)">来週月曜日の提出物と集合場所の変更</button>
-            <button class="quiz-option" onclick="answerSpeed(this, false)">体育の授業がなくなること</button>
-            <button class="quiz-option" onclick="answerSpeed(this, false)">試験の日程について</button>
+            <button class="quiz-option" onclick="answerSpeed(this,false)">体育館のまま</button>
+            <button class="quiz-option" onclick="answerSpeed(this,true)">会議室</button>
+            <button class="quiz-option" onclick="answerSpeed(this,false)">図書室</button>
+            <button class="quiz-option" onclick="answerSpeed(this,false)">職員室</button>
           </div>
           <div class="quiz-result" id="speedResult"></div>
         </div>
       </div>
-    </div>
-
-    <div class="deco deco-r" style="margin-top: 70px;"></div>
-  </section>
-
-  <div class="deco deco-full"></div>
-
-  <!-- CLOSING -->
-  <section class="closing">
-    <div class="deco deco-mid reveal" style="margin-bottom: 60px;"></div>
-    <div class="closing-inner reveal">
-      <h2>いかがでしたか？</h2>
-      <p>
-        これはほんの一部に過ぎません。<br>
-        APDのある人は、毎日この困難の中で生活しています。<br><br>
-        <span class="highlight">「もう一度言ってください」</span>と言いづらい場面。<br>
-        <span class="highlight">「なぜ聞いてないの」</span>と責められる瞬間。<br><br>
-        あなたの理解が、小さな支えになります。
-      </p>
-      <div class="closing-btns">
-        <a href="understand.html" class="btn">もっと理解する</a>
-        <a href="index.html" class="btn">トップに戻る</a>
+      <div class="next-wrap" id="nextEx3">
+        <button class="btn" onclick="nextSlide(event)">まとめへ &rsaquo;</button>
       </div>
     </div>
-    <div class="deco deco-mid reveal" style="margin-top: 60px;"></div>
-  </section>
+  </div>
+  ═══ EXHIBIT 03 ここまで ═══ -->
 
-  <div class="deco deco-full"></div>
+  <!-- ═══ CLOSING ═══ -->
+  <div class="slide slide-close" data-type="story" id="s-close">
+    <h2 style="font-size:clamp(1.6rem,3vw,2.4rem);font-weight:400;letter-spacing:0.06em;margin-bottom:36px;">いかがでしたか？</h2>
+    <p style="font-size:0.94rem;line-height:2.2;color:var(--white-dim);font-weight:300;margin-bottom:40px;max-width:580px;">
+      これはほんの一部に過ぎません。<br>
+      APDのある人は、毎日この困難の中で生活しています。<br><br>
+      <span style="color:var(--gold);">「もう一度言ってください」</span>と言いづらい場面。<br>
+      <span style="color:var(--gold);">「なぜ聞いてないの」</span>と責められる瞬間。<br><br>
+      あなたの理解が、小さな支えになります。
+    </p>
+    <div class="close-btns">
+      <a href="understand.html" class="btn">もっと理解する</a>
+      <a href="index.html" class="btn">トップに戻る</a>
+    </div>
+  </div>
 
-  <!-- FOOTER -->
-  <footer>
-    <p>APD体験館 &nbsp;|&nbsp; 作者 りんどう</p>
-  </footer>
+</div><!-- /#slideshow -->
 
-  <!-- ================================================================
-       JAVASCRIPT
-       ================================================================ -->
-  <!-- Firebase -->
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js';
-    import { getAnalytics, logEvent } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js';
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js';
+  import { getAnalytics, logEvent } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js';
+  const app = initializeApp({ apiKey:"AIzaSyCqXSWH99fXl05ETYzTgEI3kWQTwYmxwpw",authDomain:"apd-web-7e28d.firebaseapp.com",projectId:"apd-web-7e28d",storageBucket:"apd-web-7e28d.firebasestorage.app",messagingSenderId:"508825183848",appId:"1:508825183848:web:13838a391bc8c3cd5d3ddd",measurementId:"G-0C0MWCK9TQ" });
+  window._analytics = getAnalytics(app);
+  window._logEvent = logEvent;
+</script>
 
-    const app = initializeApp({
-      apiKey: "AIzaSyCqXSWH99fXl05ETYzTgEI3kWQTwYmxwpw",
-      authDomain: "apd-web-7e28d.firebaseapp.com",
-      projectId: "apd-web-7e28d",
-      storageBucket: "apd-web-7e28d.firebasestorage.app",
-      messagingSenderId: "508825183848",
-      appId: "1:508825183848:web:13838a391bc8c3cd5d3ddd",
-      measurementId: "G-0C0MWCK9TQ"
-    });
-    const analytics = getAnalytics(app);
-    window._analytics = analytics;
-    window._logEvent = logEvent;
-  </script>
+<script>
+/* ── SLIDE CONTROLLER ── */
+const allSlides = Array.from(document.querySelectorAll('.slide'));
+let currentIdx = 0;
 
-  <script>
-    /* ---- Reveal on scroll ---- */
-    const reveals = document.querySelectorAll('.reveal');
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.1 });
-    reveals.forEach(el => revealObserver.observe(el));
+function showSlide(idx) {
+  allSlides.forEach((s, i) => s.classList.toggle('active', i === idx));
+  currentIdx = idx;
+}
 
+function nextSlide(e) {
+  if (e) e.stopPropagation();
+  if (currentIdx < allSlides.length - 1) showSlide(currentIdx + 1);
+}
 
-    /* ================================================================
-       EXHIBIT 1: NOISE
-       ================================================================ */
-    const NOISE_CHARS = 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんアイウエオカキクケコ#@%！★◆□△▲■▼▽○';
+// Click on story slides → advance
+document.getElementById('slideshow').addEventListener('click', (e) => {
+  const slide = allSlides[currentIdx];
+  if (slide.dataset.type !== 'story') return;
+  if (e.target.closest('button, a, input, select')) return;
+  nextSlide(e);
+});
 
-    const SCENES = {
-      school: {
-        context: '授業の合間、騒がしい教室の中で友人が話しかけてきました。',
-        speaker: '友人',
-        text: 'ねえ、明日の集まり場所が変わったんだけど、きいてる？',
-        audio: 'audio-school.mp3'
-      },
-      station: {
-        context: '駅のホームで友人と会話をしていると、電車が通過していきました。',
-        speaker: '友人',
-        text: '今から５分後にくる電車に乗って、大阪から京都まで行くよ、\nわかった？',
-        audio: 'audio-station.mp3'
-      },
-      construction: {
-        context: '工事現場で、先輩が話しかけてきました。',
-        speaker: '先輩',
-        text: 'あの部品はまだ届かないらしい。\n今日は先にこの作業を終わらせてくれ。',
-        audio: 'audio-construction.mp3'
-      }
-    };
+/* ── NAV DROPDOWN ── */
+document.querySelectorAll('.nav-dropdown').forEach(dd => {
+  dd.querySelector('.nav-dropdown-btn').addEventListener('click', e => {
+    e.stopPropagation();
+    const open = dd.classList.contains('open');
+    document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+    if (!open) dd.classList.add('open');
+  });
+});
+document.addEventListener('click', () => {
+  document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+});
 
-    let currentScene = 'school';
-    let noiseInterval = null;
-    let noiseLevel = 0;
+/* ── EXHIBIT 01: 3 SCENES ── */
+const SCENE_DATA = {
+  1: { text:'ねえ、明日の集まり場所が変わったんだけど、きいてる？' },
+  2: { text:'今から５分後にくる電車に乗って、大阪から京都まで行くよ、\nわかった？' },
+  3: { text:'あの部品はまだ届かないらしい。\n今日は先にこの作業を終わらせてくれ。' }
+};
+const sceneVisible = { 1:false, 2:false, 3:false };
 
-    function applyNoise(text, level) {
-      return text.split('').map(ch => {
-        if ('　 、。「」？！・\n'.includes(ch)) return ch;
-        if (Math.random() < level / 100) {
-          return NOISE_CHARS[Math.floor(Math.random() * NOISE_CHARS.length)];
-        }
-        return ch;
-      }).join('');
-    }
+function startScene(n) {
+  const audio = document.getElementById('audio'+n);
+  audio.play();
+  document.getElementById('start'+n).style.display = 'none';
+  document.getElementById('badge'+n).style.display = '';
+  document.getElementById('show'+n).style.display = '';
+  document.getElementById('reset'+n).style.display = '';
+  audio.onended = () => {
+    document.getElementById('badge'+n).style.display = 'none';
+    document.getElementById('next'+n).classList.add('show');
+  };
+}
 
-    // タブ切り替え
-    document.querySelectorAll('.scene-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        textVisible = false;
-        resetNoise();
-        document.querySelectorAll('.scene-tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        currentScene = tab.dataset.scene;
-        const s = SCENES[currentScene];
-        document.getElementById('noiseContext').textContent = s.context;
-        document.getElementById('noiseSpeaker').textContent = s.speaker;
-        document.getElementById('noiseText').textContent = toQuestion(s.text);
-      });
-    });
+function toggleScene(n) {
+  sceneVisible[n] = !sceneVisible[n];
+  document.getElementById('txt'+n).textContent = sceneVisible[n] ? SCENE_DATA[n].text : '話の内容を聴き取ってみましょう';
+  document.getElementById('show'+n).textContent = sceneVisible[n] ? '話を非表示にする' : '話を表示する';
+  if (sceneVisible[n]) document.getElementById('badge'+n).style.display = 'none';
+}
 
-    function toQuestion() {
-      return '話の内容を聴き取ってみましょう';
-    }
-
-    function startNoise() {
-      const audio = document.getElementById('noiseAudio');
-      audio.src = SCENES[currentScene].audio;
-      audio.play();
-
-      document.getElementById('btnStart').style.display = 'none';
-      document.getElementById('playingBadge').style.display = '';
-      document.getElementById('btnShow').style.display = '';
-      document.getElementById('btnReset').style.display = '';
-    }
-
-    let textVisible = false;
-
-    function toggleText() {
-      const s = SCENES[currentScene];
-      textVisible = !textVisible;
-      document.getElementById('noiseText').textContent = textVisible ? s.text : toQuestion(s.text);
-      if (textVisible) document.getElementById('playingBadge').style.display = 'none';
-    }
-
-    function resetNoise() {
-      const audio = document.getElementById('noiseAudio');
-      audio.pause();
-      audio.currentTime = 0;
-
-      const s = SCENES[currentScene];
-      textVisible = false;
-      document.getElementById('noiseText').textContent = toQuestion(s.text);
-      document.getElementById('btnStart').style.display = '';
-      document.getElementById('playingBadge').style.display = 'none';
-      document.getElementById('btnShow').style.display = 'none';
-      document.getElementById('btnReset').style.display = 'none';
-    }
+function resetScene(n) {
+  const audio = document.getElementById('audio'+n);
+  audio.pause(); audio.currentTime = 0; audio.onended = null;
+  sceneVisible[n] = false;
+  document.getElementById('txt'+n).textContent = '話の内容を聴き取ってみましょう';
+  document.getElementById('start'+n).style.display = '';
+  document.getElementById('badge'+n).style.display = 'none';
+  document.getElementById('show'+n).style.display = 'none';
+  document.getElementById('reset'+n).style.display = 'none';
+}
 
 
-    /* ================================================================
-       EXHIBIT 2: MULTIPLE VOICES
-       ================================================================ */
+/* ── EXHIBIT 03: SPEED (非表示中・復活可) ──
+const SPEED_TEXT = '来週の月曜日に提出物があります。\n国語のレポートを忘れずに。\nまた、集合場所が体育館から会議室に変更になりました。\n以上です。';
+let speedTextVisible = false;
 
-    // Sato's lines (distractor)
-    const SATO_LINES = [
-      'そうそう昨日見た映画がさ',
-      'めちゃくちゃよかったんだよね',
-      'エンディングで泣いちゃって',
-      'また観に行きたいくらい',
-      'あ、でも続編があるらしいよ',
-      '来月公開だって聞いた',
-      '一緒に行く？時間あれば',
-    ];
+function startSpeed() {
+  const audio = document.getElementById('audio03');
+  audio.playbackRate = 1.3; audio.play();
+  document.getElementById('speedStartBtn').style.display = 'none';
+  document.getElementById('speedPlayingBadge').style.display = '';
+  document.getElementById('speedShowBtn').style.display = '';
+  document.getElementById('speedResetBtn').style.display = '';
+  audio.onended = () => {
+    document.getElementById('speedPlayingBadge').style.display = 'none';
+    setTimeout(() => document.getElementById('speedQuiz').classList.add('show'), 500);
+  };
+}
 
-    // Tanaka's lines (TARGET — about trip packing)
-    const TANAKA_LINES = [
-      '来週の旅行なんだけど',
-      '持ち物まとめてる？',
-      '集合は新宿駅の南口で',
-      '9時に集合ね忘れないで',
-      'タオルと着替えは多めに',
-      '日焼け止めも必須だよ',
-      '財布と保険証も忘れずに',
-    ];
+function toggleSpeedText() {
+  speedTextVisible = !speedTextVisible;
+  document.getElementById('speedText').textContent = speedTextVisible ? SPEED_TEXT : '話の内容を聴き取ってみましょう';
+  document.getElementById('speedShowBtn').textContent = speedTextVisible ? '話を非表示にする' : '話を表示する';
+  if (speedTextVisible) document.getElementById('speedPlayingBadge').style.display = 'none';
+}
 
-    // Suzuki's lines (distractor)
-    const SUZUKI_LINES = [
-      'あのプロジェクトどうなった？',
-      '締め切り来週だよね？',
-      '資料まだ全部揃ってない',
-      '誰か担当決まってる？',
-      'ちょっと確認してほしいんだけど',
-      '急いで対応しないとやばいかも',
-      'ミーティング今日中に入れよう',
-    ];
+function resetSpeed() {
+  const audio = document.getElementById('audio03');
+  audio.pause(); audio.currentTime=0; audio.onended=null;
+  speedTextVisible=false;
+  document.getElementById('speedText').textContent='話の内容を聴き取ってみましょう';
+  document.getElementById('speedStartBtn').style.display='';
+  document.getElementById('speedPlayingBadge').style.display='none';
+  document.getElementById('speedShowBtn').style.display='none';
+  document.getElementById('speedResetBtn').style.display='none';
+  document.getElementById('speedQuiz').classList.remove('show');
+  document.querySelectorAll('#speedQuiz .quiz-option').forEach(b => { b.disabled=false; b.classList.remove('correct','wrong'); });
+  document.getElementById('speedResult').classList.remove('show');
+  document.getElementById('speedResult').innerHTML='';
+}
 
-    let voicesTimer  = null;
-    let voicesActive = false;
-    let satoCursor   = 0;
-    let tanakaCursor = 0;
-    let suzukiCursor = 0;
-
-    function addLine(containerId, line) {
-      const el = document.getElementById(containerId);
-      const span = document.createElement('span');
-      span.className = 'voice-phrase';
-      span.textContent = '？';
-      el.appendChild(span);
-      // keep only last 4 lines visible
-      while (el.children.length > 4) el.removeChild(el.firstChild);
-    }
-
-    function voicesTick() {
-      if (satoCursor < SATO_LINES.length) {
-        addLine('vcontent0', SATO_LINES[satoCursor++]);
-      }
-      if (tanakaCursor < TANAKA_LINES.length) {
-        addLine('vcontent1', TANAKA_LINES[tanakaCursor++]);
-      }
-      if (suzukiCursor < SUZUKI_LINES.length) {
-        addLine('vcontent2', SUZUKI_LINES[suzukiCursor++]);
-      }
-    }
-
-    function startVoices() {
-      if (voicesActive) return;
-      voicesActive = true;
-
-      if (window._logEvent && window._analytics) {
-        window._logEvent(window._analytics, 'exhibit_start', { exhibit: 'voices' });
-      }
-
-      // Clear
-      ['vcontent0','vcontent1','vcontent2'].forEach(id => {
-        document.getElementById(id).innerHTML = '';
-      });
-      satoCursor = tanakaCursor = suzukiCursor = 0;
-
-      // 音声を同時再生（佐藤・鈴木は小さめ）
-      const audioSato   = document.getElementById('audioSato');
-      const audioTanaka = document.getElementById('audioTanaka');
-      const audioSuzuki = document.getElementById('audioSuzuki');
-      audioSato.volume   = 0.4;
-      audioTanaka.volume = 1.0;
-      audioSuzuki.volume = 0.4;
-      audioSato.play();
-      audioTanaka.play();
-      audioSuzuki.play();
-
-      document.getElementById('voicesGrid').style.opacity = '1';
-      document.getElementById('voicesGrid').style.pointerEvents = 'auto';
-      document.getElementById('voicesStartBtn').disabled = true;
-      document.getElementById('voicesStartBtn').textContent = '体験中…';
-
-      const timerBar  = document.getElementById('timerBar');
-      const timerFill = document.getElementById('timerFill');
-      timerBar.style.display = 'block';
-      timerFill.style.width  = '100%';
-
-      const DURATION = 10000; // 10 seconds
-      const started  = Date.now();
-
-      voicesTick();
-      voicesTimer = setInterval(() => {
-        const elapsed = Date.now() - started;
-        const pct     = Math.max(0, 100 - (elapsed / DURATION) * 100);
-        timerFill.style.width = pct + '%';
-        voicesTick();
-        if (elapsed >= DURATION) {
-          clearInterval(voicesTimer);
-          voicesActive = false;
-          timerBar.style.display = 'none';
-          document.getElementById('voicesQuiz').classList.add('show');
-          document.getElementById('voicesStartBtn').textContent = '体験を開始する';
-          document.getElementById('voicesStartBtn').disabled = false;
-        }
-      }, 2600);
-    }
-
-
-
-    function answerVoices(btn, isCorrect) {
-      document.querySelectorAll('#voicesQuiz .quiz-option').forEach(b => {
-        b.disabled = true;
-        if (b === btn) b.classList.add(isCorrect ? 'correct' : 'wrong');
-      });
-      if (!isCorrect) {
-        document.querySelectorAll('#voicesQuiz .quiz-option').forEach(b => {
-          if (b.textContent === '新宿駅の南口') b.classList.add('correct');
-        });
-      }
-      const resultEl = document.getElementById('voicesResult');
-      resultEl.innerHTML = isCorrect
-        ? '正解です。集中するのは大変ではありませんでしたか？<br>APDのある人は、この状況が毎日の現実です。'
-        : '正解は <strong>新宿駅の南口</strong> でした。<br>複数の声が重なると、特定の人の声を追うことが非常に難しいのです。';
-      resultEl.classList.add('show');
-
-      // 音声停止
-      ['audioSato','audioTanaka','audioSuzuki'].forEach(id => {
-        const a = document.getElementById(id);
-        a.pause(); a.currentTime = 0;
-      });
-
-      // 会話テキストを開示
-      [
-        { id: 'vcontent0', lines: SATO_LINES },
-        { id: 'vcontent1', lines: TANAKA_LINES },
-        { id: 'vcontent2', lines: SUZUKI_LINES },
-      ].forEach(({ id, lines }) => {
-        const el = document.getElementById(id);
-        el.innerHTML = '';
-        lines.forEach(line => {
-          const span = document.createElement('span');
-          span.className = 'voice-phrase';
-          span.textContent = line;
-          el.appendChild(span);
-        });
-      });
-    }
-
-    /* ================================================================
-       EXHIBIT 3: SPEED / DISAPPEARING WORDS
-       ================================================================ */
-
-    const SPEED_WORDS = [
-      '来週の', '月曜日に', '提出物が', 'あります。',
-      '国語の', 'レポートを', '忘れずに。',
-      'また、', '集合場所が', '体育館から', '会議室に',
-      '変更に', 'なりました。', '以上です。'
-    ];
-
-    let speedActive = false;
-    let speedIdx    = 0;
-    let speedTimer  = null;
-
-    function startSpeed() {
-      if (speedActive) return;
-      speedActive = true;
-      speedIdx    = 0;
-
-      if (window._logEvent && window._analytics) {
-        window._logEvent(window._analytics, 'exhibit_start', { exhibit: 'speed' });
-      }
-
-      document.getElementById('speedStartBtn').disabled = true;
-      document.getElementById('speedStartBtn').textContent = '再生中…';
-      document.getElementById('speedQuiz').classList.remove('show');
-      document.querySelectorAll('#speedQuiz .quiz-option').forEach(b => {
-        b.disabled = false;
-        b.classList.remove('correct', 'wrong');
-      });
-      document.getElementById('speedResult').classList.remove('show');
-      document.getElementById('speedResult').textContent = '';
-
-      showNextWord();
-    }
-
-    function showNextWord() {
-      if (speedIdx >= SPEED_WORDS.length) {
-        // Done
-        const wordEl = document.getElementById('speedWord');
-        wordEl.classList.add('hidden');
-        document.getElementById('speedProgress').textContent = '';
-        speedActive = false;
-        document.getElementById('speedStartBtn').textContent = 'もう一度';
-        document.getElementById('speedStartBtn').disabled = false;
-        setTimeout(() => {
-          document.getElementById('speedQuiz').classList.add('show');
-        }, 600);
-        return;
-      }
-
-      const wordEl    = document.getElementById('speedWord');
-      const progressEl = document.getElementById('speedProgress');
-
-      wordEl.classList.add('hidden');
-      progressEl.textContent = (speedIdx + 1) + ' / ' + SPEED_WORDS.length;
-
-      setTimeout(() => {
-        wordEl.textContent = SPEED_WORDS[speedIdx];
-        wordEl.classList.remove('hidden');
-        speedIdx++;
-
-        // Display time: 700ms per word (short!)
-        speedTimer = setTimeout(() => {
-          showNextWord();
-        }, 700);
-      }, 150);
-    }
-
-    function answerSpeed(btn, isCorrect) {
-      if (window._logEvent && window._analytics) {
-        window._logEvent(window._analytics, 'quiz_answer', {
-          exhibit: 'speed',
-          correct: isCorrect,
-          selected: btn.textContent.trim()
-        });
-      }
-      document.querySelectorAll('#speedQuiz .quiz-option').forEach(b => {
-        b.disabled = true;
-        if (b === btn) b.classList.add(isCorrect ? 'correct' : 'wrong');
-      });
-      if (!isCorrect) {
-        document.querySelectorAll('#speedQuiz .quiz-option').forEach((b, i) => {
-          if (i === 1) b.classList.add('correct');
-        });
-      }
-      const resultEl = document.getElementById('speedResult');
-      resultEl.innerHTML = isCorrect
-        ? '正解です。 &nbsp;うまく追えましたか？<br>APDのある人には、この速度でも追いつくのが難しいことがあります。'
-        : '正解は <strong>「来週月曜日の提出物と集合場所の変更」</strong> でした。<br><br>言葉が次々と消えてしまうと、前の情報を保持しながら次を処理するのが追いつかなくなります。<br>APDのある人はこれが音声でも起きています。巻き戻しのきかない日常の中で。';
-      resultEl.classList.add('show');
-    }
-  </script>
-  <script>
-    // Dropdown nav
-    document.querySelectorAll('.nav-dropdown').forEach(dropdown => {
-      const btn = dropdown.querySelector('.nav-dropdown-btn');
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isOpen = dropdown.classList.contains('open');
-        document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
-        if (!isOpen) dropdown.classList.add('open');
-      });
-    });
-
-    document.addEventListener('click', () => {
-      document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
-    });
-
-    // Track each exhibit section viewed
-    document.querySelectorAll('.exhibit-block').forEach((block, i) => {
-      const obs = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting && window._logEvent && window._analytics) {
-            window._logEvent(window._analytics, 'section_view', { section: 'exhibit_' + (i + 1) });
-            obs.disconnect();
-          }
-        });
-      }, { threshold: 0.3 });
-      obs.observe(block);
-    });
-
-    // Track closing section viewed
-    const closing = document.querySelector('.closing');
-    if (closing) {
-      const closingObs = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting && window._logEvent && window._analytics) {
-            window._logEvent(window._analytics, 'section_view', { section: 'experience_closing' });
-            closingObs.disconnect();
-          }
-        });
-      }, { threshold: 0.3 });
-      closingObs.observe(closing);
-    }
-  </script>
+function answerSpeed(btn, isCorrect) {
+  document.querySelectorAll('#speedQuiz .quiz-option').forEach(b => {
+    b.disabled=true;
+    if (b===btn) b.classList.add(isCorrect?'correct':'wrong');
+  });
+  if (!isCorrect) document.querySelectorAll('#speedQuiz .quiz-option').forEach(b => { if(b.textContent==='会議室') b.classList.add('correct'); });
+  const r=document.getElementById('speedResult');
+  r.innerHTML = isCorrect ? '正解です。うまく聴き取れましたか？<br>APDのある人は、早口の会話に追いつくのがとても難しいのです。' : '正解は <strong>会議室</strong> でした。<br>早口で話されると処理が追いつかず、重要な情報を取りこぼしてしまいます。';
+  r.classList.add('show');
+  document.getElementById('nextEx3').classList.add('show');
+}
+── EXHIBIT 03 ここまで ── */
+</script>
 </body>
 </html>

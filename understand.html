@@ -428,6 +428,7 @@ footer {
       font-weight: 300;
       border-top: 1px solid var(--gold-line);
       padding-top: 24px;
+      text-align: center;
     }
 
     .accordion-body p .em {
@@ -531,12 +532,30 @@ footer {
       font-family: 'Noto Sans JP', sans-serif;
       font-size: 28rem;
       font-weight: 900;
-      color: rgba(201, 168, 76, 0.12);
       line-height: 1;
       transform: rotate(-30deg);
       pointer-events: none;
       user-select: none;
       z-index: -1;
+      background: linear-gradient(
+        to bottom,
+        rgba(201, 168, 76, 0.08) 0%,
+        rgba(201, 168, 76, 0.08) 30%,
+        rgba(201, 168, 76, 0.40) 50%,
+        rgba(201, 168, 76, 0.08) 70%,
+        rgba(201, 168, 76, 0.08) 100%
+      );
+      background-size: 100% 700px;
+      background-repeat: repeat-y;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: questionShimmer 5s linear infinite;
+    }
+
+    @keyframes questionShimmer {
+      from { background-position: 0 0; }
+      to   { background-position: 0 700px; }
     }
   </style>
 </head>
@@ -549,7 +568,6 @@ footer {
       <li class="nav-dropdown">
         <button class="nav-dropdown-btn">相談する <span class="nav-dropdown-arrow">▼</span></button>
         <ul class="nav-dropdown-menu">
-          <li><a href="https://apd-peer.jimdofree.com/%E5%80%8B%E5%88%A5%E7%9B%B8%E8%AB%87/" target="_blank" rel="noopener">個別相談</a></li>
           <li><a href="https://line.me/ti/g2/avoAahmHoH8aKvYKPfHE_g?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank" rel="noopener">オープンチャット</a></li>
         </ul>
       </li>
@@ -569,11 +587,11 @@ footer {
         <button class="accordion-btn" aria-expanded="false">APDとは？</button>
         <div class="accordion-body">
           <p>
-            APD（聴覚情報処理障害）とは、耳の機能は正常であるにもかかわらず、
+            APD（聴覚情報処理障害）とは、耳の機能は正常であるにもかかわらず、<br>
             脳での音声処理がうまくいかない状態です。<br><br>
             音は聞こえていても、それを言葉として認識・処理する過程に困難が生じます。
             「聞こえているのに、聞き取れない」という状態が特徴的です。<br><br>
-            聴力検査では異常が見られないため、周囲に気づかれにくく、
+            聴力検査では異常が見られないため、周囲に気づかれにくく、<br>
             本人も長年にわたって気づかないことがあります。
           </p>
         </div>
@@ -586,9 +604,9 @@ footer {
           <p>
             <span class="em">騒がしい場所での会話</span>が特に難しく、
             相手の声がノイズに溶け込んでしまいます。<br><br>
-            複数の人が同時に話すと、どの声に集中すればよいか分からなくなります。
+            複数の人が同時に話すと、どの声に集中すればよいか分からなくなります。<br>
             作業しながら話を聞くことも苦手です。<br><br>
-            電話や聞き慣れない声、早口、抑揚の少ない話し方も聞き取りにくく、
+            電話や聞き慣れない声、早口、抑揚の少ない話し方も聞き取りにくく、<br>
             「もう一度言ってください」を繰り返すことへの申し訳なさも積み重なります。
           </p>
         </div>
@@ -616,11 +634,11 @@ footer {
           <p>
             「聴力検査が正常なら問題ない」は誤りです。<br>
             APDは聴力ではなく、<span class="em">音声の処理能力</span>の問題です。<br><br>
-            「注意散漫」「やる気の問題」と誤解されることがありますが、
+            「注意散漫」「やる気の問題」と誤解されることがありますが、<br>
             これは本人の努力不足ではありません。<br><br>
             また、APDは発達障害との重複が多く見られますが、
-            APD単独でも存在します。理解と適切なサポートが、
-            当事者の日常生活の質を大きく改善します。
+            APD単独でも存在します。<br>
+            理解と適切なサポートが、当事者の日常生活の質を大きく改善します。
           </p>
         </div>
       </div>
