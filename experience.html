@@ -866,6 +866,10 @@ footer {
           20秒後に、田中さんが話した内容についてのクイズが出ます。
         </p>
 
+        <audio id="audioSato"   src="audio-sato.mp3"></audio>
+        <audio id="audioTanaka" src="audio-tanaka.mp3"></audio>
+        <audio id="audioSuzuki" src="audio-suzuki.mp3"></audio>
+
         <div class="voices-controls">
           <button class="exp-btn" id="voicesStartBtn" onclick="startVoices()">体験を開始する</button>
         </div>
@@ -1185,6 +1189,11 @@ footer {
       });
       satoCursor = tanakaCursor = suzukiCursor = 0;
 
+      // 音声を同時再生
+      document.getElementById('audioSato').play();
+      document.getElementById('audioTanaka').play();
+      document.getElementById('audioSuzuki').play();
+
       document.getElementById('voicesGrid').style.opacity = '1';
       document.getElementById('voicesGrid').style.pointerEvents = 'auto';
       document.getElementById('voicesStartBtn').disabled = true;
@@ -1239,6 +1248,13 @@ footer {
         ? '正解です。 &nbsp;でも…集中するのが大変ではありませんでしたか？<br>APDのある人は、この状況が毎日の現実です。'
         : '田中さんは <strong>「来週の旅行の持ち物・集合場所」</strong> について話していました。<br><br>他の声に気を取られてしまいましたか？<br>APDのある人は、特定の声を「選んで」聴くことが非常に難しいのです。';
       resultEl.classList.add('show');
+
+      // 音声停止
+      ['audioSato','audioTanaka','audioSuzuki'].forEach(id => {
+        const a = document.getElementById(id);
+        a.pause();
+        a.currentTime = 0;
+      });
 
       // 会話内容を開示
       const reveal = [
