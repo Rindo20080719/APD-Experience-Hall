@@ -829,7 +829,7 @@ footer {
 
         <div class="noise-bubble" id="noiseBubble">
           <p class="noise-speaker" id="noiseSpeaker">友人</p>
-          <div class="noise-text" id="noiseText">？？？？？？？？？？？？？？？？？？？？？</div>
+          <div class="noise-text" id="noiseText">？</div>
         </div>
 
         <div style="margin-top: 28px; text-align: center; display: flex; gap: 16px; justify-content: center; align-items: center;">
@@ -1061,8 +1061,8 @@ footer {
       });
     });
 
-    function toQuestion(text) {
-      return text.split('').map(ch => '　 \n'.includes(ch) ? ch : '？').join('');
+    function toQuestion() {
+      return '？';
     }
 
     function startNoise() {
