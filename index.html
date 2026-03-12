@@ -328,6 +328,19 @@ footer {
   to   { opacity: 1; transform: translateY(0); }
 }
 
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      nav { padding: 14px 20px; }
+      .nav-links { gap: 18px; }
+      .nav-links a, .nav-dropdown-btn { font-size: 0.82rem; }
+      .hero { padding: 0 24px; }
+      .hero-separator { width: 90%; }
+      .hero-btns { gap: 16px; }
+      .btn { padding: 12px 28px; font-size: 0.85rem; }
+      .section { padding: 60px 24px; }
+      .authors-grid { gap: 48px !important; }
+    }
+
     /* ===== INDEX SPECIFIC ===== */
     .hero {
       min-height: 100vh;
@@ -547,7 +560,7 @@ footer {
     <div class="section-inner reveal">
       <h2 style="font-size: clamp(2.8rem, 5vw, 4rem); font-weight: 400; letter-spacing: 0.1em; margin-bottom: 70px;">作者</h2>
 
-      <div style="display: flex; justify-content: center; gap: 100px; flex-wrap: wrap; margin-bottom: 72px;">
+      <div class="authors-grid" style="display: flex; justify-content: center; gap: 100px; flex-wrap: wrap; margin-bottom: 72px;">
 
         <!-- りんどう -->
         <div class="reveal" style="display: flex; flex-direction: column; align-items: center; gap: 0;">

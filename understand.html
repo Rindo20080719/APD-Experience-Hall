@@ -557,6 +557,27 @@ footer {
       from { background-position: 0 0; }
       to   { background-position: 0 700px; }
     }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      nav { padding: 14px 20px; }
+      .nav-links { gap: 18px; }
+      .nav-links a, .nav-dropdown-btn { font-size: 0.82rem; }
+      .understand-page { padding: 100px 20px 60px; }
+      .understand-title { font-size: clamp(1.8rem,6vw,2.4rem); margin-bottom: 40px; }
+      .accordion-list { max-width: 100%; }
+      .accordion-btn { padding: 18px 28px; font-size: 1rem; }
+      .accordion-btn::after { right: 20px; }
+      .accordion-body { padding: 0 20px; }
+      .accordion-item.open .accordion-body { padding: 0 20px 24px; }
+      .finale { padding: 60px 24px; }
+      .finale h2 { font-size: clamp(1.6rem,5vw,2rem); margin-bottom: 36px; }
+      .finale-body { grid-template-columns: 1fr; gap: 40px; }
+      .finale-text { display: flex; flex-direction: column; align-items: center; text-align: center; }
+      .finale-text div { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+      .apd-mark img { width: 120px; }
+      .question-deco { font-size: 16rem; right: 20px; }
+    }
   </style>
 </head>
 <body>
