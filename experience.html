@@ -440,6 +440,30 @@ footer {
       word-break: break-all;
     }
 
+    .playing-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+    }
+
+    .playing-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.3; transform: scale(0.7); }
+    }
+
     .scene-tabs {
       display: flex;
       gap: 12px;
@@ -808,8 +832,9 @@ footer {
           <div class="noise-text" id="noiseText">？？？？？？？？？？？？？？？？？？？？？</div>
         </div>
 
-        <div style="margin-top: 28px; text-align: center; display: flex; gap: 16px; justify-content: center;">
+        <div style="margin-top: 28px; text-align: center; display: flex; gap: 16px; justify-content: center; align-items: center;">
           <button class="exp-btn" id="btnStart" onclick="startNoise()">体験する</button>
+          <span class="playing-badge" id="playingBadge" style="display:none;"><span class="playing-dot"></span>再生中</span>
           <button class="exp-btn" id="btnShow" onclick="showText()" style="display:none;">話を見る</button>
           <button class="exp-btn" id="btnReset" onclick="resetNoise()" style="display:none;">リセット</button>
         </div>
@@ -1040,14 +1065,15 @@ footer {
     }
 
     function startNoise() {
-      // 「体験する」を非表示、「話を見る」「リセット」を表示
       document.getElementById('btnStart').style.display = 'none';
+      document.getElementById('playingBadge').style.display = '';
       document.getElementById('btnShow').style.display = '';
       document.getElementById('btnReset').style.display = '';
     }
 
     function showText() {
       document.getElementById('noiseText').textContent = SCENES[currentScene].text;
+      document.getElementById('playingBadge').style.display = 'none';
       document.getElementById('btnShow').style.display = 'none';
     }
 
@@ -1055,6 +1081,7 @@ footer {
       const s = SCENES[currentScene];
       document.getElementById('noiseText').textContent = toQuestion(s.text);
       document.getElementById('btnStart').style.display = '';
+      document.getElementById('playingBadge').style.display = 'none';
       document.getElementById('btnShow').style.display = 'none';
       document.getElementById('btnReset').style.display = 'none';
     }
