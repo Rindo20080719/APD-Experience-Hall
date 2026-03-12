@@ -832,6 +832,8 @@ footer {
           <div class="noise-text" id="noiseText">話の内容を聴き取ってみましょう</div>
         </div>
 
+        <audio id="noiseAudio" loop></audio>
+
         <div style="margin-top: 28px; text-align: center; display: flex; gap: 16px; justify-content: center; align-items: center;">
           <button class="exp-btn" id="btnStart" onclick="startNoise()">体験する</button>
           <span class="playing-badge" id="playingBadge" style="display:none;"><span class="playing-dot"></span>再生中</span>
@@ -1018,17 +1020,20 @@ footer {
       school: {
         context: '授業の合間、騒がしい教室の中で友人が話しかけてきました。',
         speaker: '友人',
-        text: 'ねえ、明日の集まり場所が変わったんだけど、きいてる？'
+        text: 'ねえ、明日の集まり場所が変わったんだけど、きいてる？',
+        audio: 'audio-school.mp3'
       },
       station: {
         context: '駅のホームで友人と会話をしていると、電車が通過していきました。',
         speaker: '友人',
-        text: '今から５分後にくる電車に乗って、大阪から京都まで行くよ、\nわかった？'
+        text: '今から５分後にくる電車に乗って、大阪から京都まで行くよ、\nわかった？',
+        audio: 'audio-station.mp3'
       },
       construction: {
         context: '工事現場で、先輩が話しかけてきました。',
         speaker: '先輩',
-        text: 'あの部品はまだ届かないらしい。\n今日は先にこの作業を終わらせてくれ。'
+        text: 'あの部品はまだ届かないらしい。\n今日は先にこの作業を終わらせてくれ。',
+        audio: 'audio-construction.mp3'
       }
     };
 
@@ -1066,6 +1071,10 @@ footer {
     }
 
     function startNoise() {
+      const audio = document.getElementById('noiseAudio');
+      audio.src = SCENES[currentScene].audio;
+      audio.play();
+
       document.getElementById('btnStart').style.display = 'none';
       document.getElementById('playingBadge').style.display = '';
       document.getElementById('btnShow').style.display = '';
@@ -1082,6 +1091,10 @@ footer {
     }
 
     function resetNoise() {
+      const audio = document.getElementById('noiseAudio');
+      audio.pause();
+      audio.currentTime = 0;
+
       const s = SCENES[currentScene];
       textVisible = false;
       document.getElementById('noiseText').textContent = toQuestion(s.text);
