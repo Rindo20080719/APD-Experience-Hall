@@ -418,6 +418,14 @@ footer {
       margin-bottom: 40px;
       text-align: center;
       min-height: 160px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease;
+    }
+
+    .noise-bubble.visible {
+      opacity: 1;
+      visibility: visible;
     }
 
     .noise-speaker {
@@ -803,14 +811,15 @@ footer {
           授業の合間、騒がしい教室の中で先生が話しかけてきました。
         </p>
 
-        <div class="noise-bubble">
+        <div class="noise-bubble" id="noiseBubble">
           <p class="noise-speaker" id="noiseSpeaker">友人</p>
           <div class="noise-text" id="noiseText">ねえ、明日の集まり場所が変わったんだけど、きいてる？</div>
         </div>
 
         <div style="margin-top: 28px; text-align: center; display: flex; gap: 16px; justify-content: center;">
-          <button class="exp-btn" onclick="startNoise()">体験する</button>
-          <button class="exp-btn" onclick="resetNoise()">リセット</button>
+          <button class="exp-btn" id="btnStart" onclick="startNoise()">体験する</button>
+          <button class="exp-btn" id="btnShow" onclick="showText()" style="display:none;">話を見る</button>
+          <button class="exp-btn" id="btnReset" onclick="resetNoise()" style="display:none;">リセット</button>
         </div>
       </div>
     </div>
@@ -1038,6 +1047,15 @@ footer {
       if (noiseInterval) return;
       noiseLevel = 0;
       const text = SCENES[currentScene].text;
+      const bubble = document.getElementById('noiseBubble');
+
+      // バブルを表示（ノイズかかった状態）
+      bubble.classList.add('visible');
+
+      // 「体験する」を非表示、「話を見る」「リセット」を表示
+      document.getElementById('btnStart').style.display = 'none';
+      document.getElementById('btnShow').style.display = '';
+      document.getElementById('btnReset').style.display = '';
 
       // 5秒かけてノイズを0→100%まで増やす
       const rampInterval = setInterval(() => {
@@ -1051,11 +1069,23 @@ footer {
       }, 80);
     }
 
+    function showText() {
+      clearInterval(noiseInterval);
+      noiseInterval = null;
+      document.getElementById('noiseText').textContent = SCENES[currentScene].text;
+      document.getElementById('btnShow').style.display = 'none';
+    }
+
     function resetNoise() {
       clearInterval(noiseInterval);
       noiseInterval = null;
       noiseLevel = 0;
-      document.getElementById('noiseText').textContent = SCENES[currentScene].text;
+      const s = SCENES[currentScene];
+      document.getElementById('noiseText').textContent = s.text;
+      document.getElementById('noiseBubble').classList.remove('visible');
+      document.getElementById('btnStart').style.display = '';
+      document.getElementById('btnShow').style.display = 'none';
+      document.getElementById('btnReset').style.display = 'none';
     }
 
 
