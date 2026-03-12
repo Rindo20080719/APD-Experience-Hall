@@ -553,16 +553,11 @@ footer {
     }
 
     .voice-topic {
-      display: none;
       font-size: 0.72rem;
       color: var(--muted);
       font-weight: 300;
       letter-spacing: 0.08em;
       margin-left: 8px;
-    }
-
-    .voice-topic.visible {
-      display: inline;
     }
 
     .voice-content {
@@ -906,6 +901,18 @@ footer {
           <div class="timer-fill" id="timerFill" style="width:100%"></div>
         </div>
 
+        <!-- Quiz -->
+        <div class="quiz-box" id="voicesQuiz">
+          <p class="quiz-q">田中さんの集合場所はどこでしたか？</p>
+          <div class="quiz-options">
+            <button class="quiz-option" onclick="answerVoices(this, false)">渋谷駅の東口</button>
+            <button class="quiz-option" onclick="answerVoices(this, true)">新宿駅の南口</button>
+            <button class="quiz-option" onclick="answerVoices(this, false)">池袋駅の西口</button>
+            <button class="quiz-option" onclick="answerVoices(this, false)">東京駅の中央口</button>
+          </div>
+          <div class="quiz-result" id="voicesResult"></div>
+        </div>
+
       </div>
     </div>
 
@@ -1219,31 +1226,7 @@ footer {
           clearInterval(voicesTimer);
           voicesActive = false;
           timerBar.style.display = 'none';
-          // 音声停止
-          ['audioSato','audioTanaka','audioSuzuki'].forEach(id => {
-            const a = document.getElementById(id);
-            a.pause(); a.currentTime = 0;
-          });
-          // トピックを開示
-          ['vtopic0','vtopic1','vtopic2'].forEach(id => {
-            document.getElementById(id).classList.add('visible');
-          });
-          // 会話テキストも開示
-          const revealData = [
-            { id: 'vcontent0', lines: SATO_LINES },
-            { id: 'vcontent1', lines: TANAKA_LINES },
-            { id: 'vcontent2', lines: SUZUKI_LINES },
-          ];
-          revealData.forEach(({ id, lines }) => {
-            const el = document.getElementById(id);
-            el.innerHTML = '';
-            lines.forEach(line => {
-              const span = document.createElement('span');
-              span.className = 'voice-phrase';
-              span.textContent = line;
-              el.appendChild(span);
-            });
-          });
+          document.getElementById('voicesQuiz').classList.add('show');
           document.getElementById('voicesStartBtn').textContent = '体験を開始する';
           document.getElementById('voicesStartBtn').disabled = false;
         }
@@ -1251,6 +1234,45 @@ footer {
     }
 
 
+
+    function answerVoices(btn, isCorrect) {
+      document.querySelectorAll('#voicesQuiz .quiz-option').forEach(b => {
+        b.disabled = true;
+        if (b === btn) b.classList.add(isCorrect ? 'correct' : 'wrong');
+      });
+      if (!isCorrect) {
+        document.querySelectorAll('#voicesQuiz .quiz-option').forEach(b => {
+          if (b.textContent === '新宿駅の南口') b.classList.add('correct');
+        });
+      }
+      const resultEl = document.getElementById('voicesResult');
+      resultEl.innerHTML = isCorrect
+        ? '正解です。集中するのは大変ではありませんでしたか？<br>APDのある人は、この状況が毎日の現実です。'
+        : '正解は <strong>新宿駅の南口</strong> でした。<br>複数の声が重なると、特定の人の声を追うことが非常に難しいのです。';
+      resultEl.classList.add('show');
+
+      // 音声停止
+      ['audioSato','audioTanaka','audioSuzuki'].forEach(id => {
+        const a = document.getElementById(id);
+        a.pause(); a.currentTime = 0;
+      });
+
+      // 会話テキストを開示
+      [
+        { id: 'vcontent0', lines: SATO_LINES },
+        { id: 'vcontent1', lines: TANAKA_LINES },
+        { id: 'vcontent2', lines: SUZUKI_LINES },
+      ].forEach(({ id, lines }) => {
+        const el = document.getElementById(id);
+        el.innerHTML = '';
+        lines.forEach(line => {
+          const span = document.createElement('span');
+          span.className = 'voice-phrase';
+          span.textContent = line;
+          el.appendChild(span);
+        });
+      });
+    }
 
     /* ================================================================
        EXHIBIT 3: SPEED / DISAPPEARING WORDS
