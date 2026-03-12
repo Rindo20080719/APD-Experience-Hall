@@ -1153,7 +1153,7 @@ footer {
       const el = document.getElementById(containerId);
       const span = document.createElement('span');
       span.className = 'voice-phrase';
-      span.textContent = line;
+      span.textContent = '？';
       el.appendChild(span);
       // keep only last 4 lines visible
       while (el.children.length > 4) el.removeChild(el.firstChild);
