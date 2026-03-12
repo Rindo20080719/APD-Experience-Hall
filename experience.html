@@ -436,6 +436,7 @@ footer {
       min-height: 80px;
       font-weight: 300;
       transition: none;
+      white-space: pre-wrap;
       word-break: break-all;
     }
 
@@ -996,12 +997,12 @@ footer {
       station: {
         context: '駅のホームでアナウンスが流れる中、友人が話しかけてきました。',
         speaker: '友人',
-        text: '今から５分後にくる電車に乗って、大阪から京都まで行くよ、わかった？'
+        text: '今から５分後にくる電車に乗って、\n大阪から京都まで行くよ、わかった？'
       },
       construction: {
         context: '工事現場で、先輩が話しかけてきました。',
         speaker: '先輩',
-        text: 'あの部品はまだ届かないらしい。今日は先にこの作業を終わらせてくれ。'
+        text: 'あの部品はまだ届かないらしい。\n今日は先にこの作業を終わらせてくれ。'
       }
     };
 
@@ -1011,7 +1012,7 @@ footer {
 
     function applyNoise(text, level) {
       return text.split('').map(ch => {
-        if ('　 、。「」？！・'.includes(ch)) return ch;
+        if ('　 、。「」？！・\n'.includes(ch)) return ch;
         if (Math.random() < level / 100) {
           return NOISE_CHARS[Math.floor(Math.random() * NOISE_CHARS.length)];
         }
