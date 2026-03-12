@@ -835,7 +835,7 @@ footer {
         <div style="margin-top: 28px; text-align: center; display: flex; gap: 16px; justify-content: center; align-items: center;">
           <button class="exp-btn" id="btnStart" onclick="startNoise()">体験する</button>
           <span class="playing-badge" id="playingBadge" style="display:none;"><span class="playing-dot"></span>再生中</span>
-          <button class="exp-btn" id="btnShow" onclick="showText()" style="display:none;">話を見る</button>
+          <button class="exp-btn" id="btnShow" onclick="toggleText()" style="display:none;">話を表示・非表示</button>
           <button class="exp-btn" id="btnReset" onclick="resetNoise()" style="display:none;">リセット</button>
         </div>
       </div>
@@ -1049,6 +1049,7 @@ footer {
     // タブ切り替え
     document.querySelectorAll('.scene-tab').forEach(tab => {
       tab.addEventListener('click', () => {
+        textVisible = false;
         resetNoise();
         document.querySelectorAll('.scene-tab').forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
@@ -1071,14 +1072,18 @@ footer {
       document.getElementById('btnReset').style.display = '';
     }
 
-    function showText() {
-      document.getElementById('noiseText').textContent = SCENES[currentScene].text;
-      document.getElementById('playingBadge').style.display = 'none';
-      document.getElementById('btnShow').style.display = 'none';
+    let textVisible = false;
+
+    function toggleText() {
+      const s = SCENES[currentScene];
+      textVisible = !textVisible;
+      document.getElementById('noiseText').textContent = textVisible ? s.text : toQuestion(s.text);
+      if (textVisible) document.getElementById('playingBadge').style.display = 'none';
     }
 
     function resetNoise() {
       const s = SCENES[currentScene];
+      textVisible = false;
       document.getElementById('noiseText').textContent = toQuestion(s.text);
       document.getElementById('btnStart').style.display = '';
       document.getElementById('playingBadge').style.display = 'none';
