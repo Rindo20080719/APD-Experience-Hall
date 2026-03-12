@@ -1198,10 +1198,16 @@ footer {
       });
       satoCursor = tanakaCursor = suzukiCursor = 0;
 
-      // 音声を同時再生
-      document.getElementById('audioSato').play();
-      document.getElementById('audioTanaka').play();
-      document.getElementById('audioSuzuki').play();
+      // 音声を同時再生（佐藤・鈴木は小さめ）
+      const audioSato   = document.getElementById('audioSato');
+      const audioTanaka = document.getElementById('audioTanaka');
+      const audioSuzuki = document.getElementById('audioSuzuki');
+      audioSato.volume   = 0.4;
+      audioTanaka.volume = 1.0;
+      audioSuzuki.volume = 0.4;
+      audioSato.play();
+      audioTanaka.play();
+      audioSuzuki.play();
 
       document.getElementById('voicesGrid').style.opacity = '1';
       document.getElementById('voicesGrid').style.pointerEvents = 'auto';
